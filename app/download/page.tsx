@@ -7,7 +7,16 @@ import { useEffect, useState } from "react";
 
 const RELEASE_URL =
   "https://github.com/lamddassds/Loudflow-updat/releases/latest/download/LoudFlow-Setup.exe";
+const RELEASES_API =
+  "https://api.github.com/repos/lamddassds/Loudflow-updat/releases/latest";
 const INSTALL_COMMAND = "irm https://loudflow.xyz/install.ps1 | iex";
+
+function formatBytes(bytes: number) {
+  if (!bytes) return "";
+  const mb = bytes / (1024 * 1024);
+  if (mb >= 1024) return `${(mb / 1024).toFixed(1)} GB`;
+  return `${Math.round(mb)} MB`;
+}
 
 type OS = "macos" | "linux" | "windows";
 
@@ -24,18 +33,38 @@ export default function DownloadPage() {
   const [os, setOs] = useState<OS>("windows");
   const [copied, setCopied] = useState(false);
   const [version, setVersion] = useState<string | null>(null);
+  const [downloadUrl, setDownloadUrl] = useState<string>(RELEASE_URL);
+  const [fileName, setFileName] = useState<string>("LoudFlow-Setup.exe");
+  const [fileSize, setFileSize] = useState<string>("");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
     setOs(detectOS());
 
-    fetch(
-      "https://api.github.com/repos/lamddassds/Loudflow-updat/releases/latest"
-    )
+    fetch(RELEASES_API)
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
-        if (d?.tag_name) setVersion(String(d.tag_name).replace(/^v/, ""));
+        if (!d) return;
+        if (d.tag_name) setVersion(String(d.tag_name).replace(/^v/, ""));
+        const exe = Array.isArray(d.assets)
+          ? d.assets.find(
+              (a: { name?: string; browser_download_url?: string; size?: number }) =>
+                typeof a?.name === "string" &&
+                a.name.toLowerCase().endsWith(".exe") &&
+                /setup|installer|install/i.test(a.name)
+            ) ||
+            d.assets.find(
+              (a: { name?: string }) =>
+                typeof a?.name === "string" &&
+                a.name.toLowerCase().endsWith(".exe")
+            )
+          : null;
+        if (exe?.browser_download_url) {
+          setDownloadUrl(exe.browser_download_url);
+          if (exe.name) setFileName(exe.name);
+          if (typeof exe.size === "number") setFileSize(formatBytes(exe.size));
+        }
       })
       .catch(() => {});
   }, []);
@@ -124,7 +153,9 @@ export default function DownloadPage() {
                 <p className="my-4 text-sm text-white/40">or</p>
 
                 <a
-                  href={RELEASE_URL}
+                  href={downloadUrl}
+                  download={fileName}
+                  rel="noopener"
                   className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-3.5 text-base font-medium text-black transition hover:bg-white/90 active:scale-[0.98]"
                 >
                   <DownloadIcon />
@@ -134,9 +165,11 @@ export default function DownloadPage() {
                 <p className="mt-5 text-sm text-white/50">
                   Requires Windows 10 or later
                 </p>
-                {mounted && version && (
+                {mounted && (version || fileSize) && (
                   <p className="mt-1 text-xs text-white/30">
-                    Version {version}
+                    {version ? `Version ${version}` : ""}
+                    {version && fileSize ? " · " : ""}
+                    {fileSize}
                   </p>
                 )}
               </motion.div>
