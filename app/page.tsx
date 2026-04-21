@@ -14,16 +14,14 @@ export default function Page() {
         transition={{ duration: 0.7, ease: "easeOut" }}
         className="relative flex flex-col items-center"
       >
-        <div className="mb-10 h-28 w-28 overflow-hidden rounded-2xl">
-          <Image
-            src="/icon.png"
-            alt="LoudFlow"
-            width={224}
-            height={224}
-            priority
-            className="h-full w-full object-cover"
-          />
-        </div>
+        <Image
+          src="/icon.png"
+          alt="LoudFlow"
+          width={160}
+          height={160}
+          priority
+          className="mb-8 h-36 w-36"
+        />
 
         <h1 className="text-center text-3xl font-medium tracking-tight text-white md:text-4xl">
           Welcome to LoudFlow
