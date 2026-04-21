@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "LoudFlow — Coming Soon",
-  description: "LoudFlow is launching soon. Hear anything, instantly.",
+  title: "LoudFlow — Hear anything, instantly.",
+  description: "Turn any text into natural speech — instantly, with a hotkey.",
   metadataBase: new URL("https://loudflow.xyz"),
   icons: {
     icon: "/icon.png",
@@ -11,8 +11,8 @@ export const metadata: Metadata = {
     apple: "/icon.png",
   },
   openGraph: {
-    title: "LoudFlow — Coming Soon",
-    description: "LoudFlow is launching soon. Hear anything, instantly.",
+    title: "LoudFlow — Hear anything, instantly.",
+    description: "Turn any text into natural speech — instantly, with a hotkey.",
     url: "https://loudflow.xyz",
     siteName: "LoudFlow",
     images: [{ url: "/icon.png", width: 512, height: 512 }],
@@ -20,8 +20,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "LoudFlow — Coming Soon",
-    description: "LoudFlow is launching soon. Hear anything, instantly.",
+    title: "LoudFlow — Hear anything, instantly.",
+    description: "Turn any text into natural speech — instantly, with a hotkey.",
     images: ["/icon.png"],
   },
 };

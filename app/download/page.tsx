@@ -299,19 +299,18 @@ function AppleIcon() {
 
 function LinuxIcon() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="h-full w-full"
-    >
-      <path d="M12 2c2.2 0 4 2.5 4 5.2 0 1.6-.5 2.6-1 3.5-.4.8-.8 1.5-.8 2.8 0 .9.5 1.7 1.3 2.3 1.5 1 2.5 2.3 2.5 3.7 0 1.6-1.8 2.5-6 2.5s-6-.9-6-2.5c0-1.4 1-2.7 2.5-3.7.8-.6 1.3-1.4 1.3-2.3 0-1.3-.4-2-.8-2.8-.5-.9-1-1.9-1-3.5C8 4.5 9.8 2 12 2z" />
-      <circle cx="10.3" cy="7" r=".6" fill="currentColor" />
-      <circle cx="13.7" cy="7" r=".6" fill="currentColor" />
-      <path d="M10.8 9.2c.4.3.8.4 1.2.4s.8-.1 1.2-.4" />
+    <svg viewBox="0 0 24 24" className="h-full w-full">
+      <path
+        fill="currentColor"
+        d="M12 1.5c-2.6 0-4.3 2-4.3 4.5 0 1.2.3 2.1.7 2.9.3.5.5 1 .5 1.4 0 .4-.2.8-.5 1.1-1 1-2.8 2.8-2.8 5.3 0 2 1.7 3.3 3.9 3.7.6.1 1.2.1 1.6.2h.8c.4 0 1-.1 1.6-.2 2.2-.4 3.9-1.7 3.9-3.7 0-2.5-1.8-4.3-2.8-5.3-.3-.3-.5-.7-.5-1.1 0-.4.2-.9.5-1.4.4-.8.7-1.7.7-2.9 0-2.5-1.7-4.5-4.3-4.5z"
+      />
+      <circle cx="10.3" cy="6.5" r="0.85" fill="#0a0a0a" />
+      <circle cx="13.7" cy="6.5" r="0.85" fill="#0a0a0a" />
+      <circle cx="10.4" cy="6.6" r="0.3" fill="#fff" />
+      <circle cx="13.8" cy="6.6" r="0.3" fill="#fff" />
+      <path d="M11.2 7.9 L12 9 L12.8 7.9 Z" fill="#f59e0b" />
+      <ellipse cx="10" cy="20.2" rx="1.9" ry="0.65" fill="#f59e0b" />
+      <ellipse cx="14" cy="20.2" rx="1.9" ry="0.65" fill="#f59e0b" />
     </svg>
   );
 }
