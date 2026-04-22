@@ -2,13 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 
-const RELEASE_URL =
-  "https://github.com/lamddassds/Loudflow-updat/releases/latest/download/LoudFlow-Setup.exe";
 const RELEASES_API =
   "https://api.github.com/repos/lamddassds/Loudflow-updat/releases/latest";
+const RELEASES_PAGE =
+  "https://github.com/lamddassds/Loudflow-updat/releases/latest";
 const INSTALL_COMMAND = "irm https://loudflow.xyz/install.ps1 | iex";
 
 function formatBytes(bytes: number) {
@@ -33,8 +32,8 @@ export default function DownloadPage() {
   const [os, setOs] = useState<OS>("windows");
   const [copied, setCopied] = useState(false);
   const [version, setVersion] = useState<string | null>(null);
-  const [downloadUrl, setDownloadUrl] = useState<string>(RELEASE_URL);
-  const [fileName, setFileName] = useState<string>("LoudFlow-Setup.exe");
+  const [downloadUrl, setDownloadUrl] = useState<string>(RELEASES_PAGE);
+  const [fileName, setFileName] = useState<string>("LoudFlow.Setup.exe");
   const [fileSize, setFileSize] = useState<string>("");
   const [mounted, setMounted] = useState(false);
 
@@ -49,10 +48,10 @@ export default function DownloadPage() {
         if (d.tag_name) setVersion(String(d.tag_name).replace(/^v/, ""));
         const exe = Array.isArray(d.assets)
           ? d.assets.find(
-              (a: { name?: string; browser_download_url?: string; size?: number }) =>
+              (a: { name?: string }) =>
                 typeof a?.name === "string" &&
                 a.name.toLowerCase().endsWith(".exe") &&
-                /setup|installer|install/i.test(a.name)
+                /setup|installer/i.test(a.name)
             ) ||
             d.assets.find(
               (a: { name?: string }) =>
@@ -74,33 +73,19 @@ export default function DownloadPage() {
       await navigator.clipboard.writeText(INSTALL_COMMAND);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
-    } catch {
-      // ignore
-    }
+    } catch {}
   }
 
   return (
-    <main className="relative flex min-h-screen flex-col bg-black text-white">
-      <div className="pointer-events-none absolute left-1/2 top-1/3 -z-10 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/[0.04] blur-[140px]" />
-
+    <main className="flex min-h-screen flex-col bg-white text-neutral-900">
       <Header />
 
-      <div className="flex flex-1 flex-col items-center justify-center px-6 py-16 md:py-24">
-        <motion.h1
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="text-center text-4xl font-medium tracking-tight md:text-5xl"
-        >
+      <div className="flex flex-1 flex-col items-center px-6 py-20 md:py-24">
+        <h1 className="text-center text-4xl font-semibold tracking-tight md:text-5xl">
           Download LoudFlow
-        </motion.h1>
+        </h1>
 
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
-          className="mt-10 flex items-center gap-3 md:gap-5"
-        >
+        <div className="mt-12 flex items-center gap-3 md:gap-5">
           <OsTab
             active={os === "macos"}
             onClick={() => setOs("macos")}
@@ -119,87 +104,68 @@ export default function DownloadPage() {
             label="Windows"
             icon={<WindowsIcon />}
           />
-        </motion.div>
+        </div>
 
-        <div className="mt-10 flex w-full max-w-md flex-col items-center">
-          <AnimatePresence mode="wait">
-            {os === "windows" ? (
-              <motion.div
-                key="windows"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.25 }}
-                className="flex w-full flex-col items-center"
-              >
-                <div className="group relative w-full">
-                  <div className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3.5">
-                    <code className="truncate font-mono text-sm text-white/90">
-                      {INSTALL_COMMAND}
-                    </code>
-                    <button
-                      onClick={copyCommand}
-                      aria-label="Copy install command"
-                      className="shrink-0 rounded-md p-1.5 text-white/60 transition hover:bg-white/10 hover:text-white"
-                    >
-                      {copied ? <CheckIcon /> : <CopyIcon />}
-                    </button>
-                  </div>
-                </div>
-
-                <p className="mt-4 text-sm text-white/50">
-                  paste this in PowerShell
-                </p>
-                <p className="my-4 text-sm text-white/40">or</p>
-
-                <a
-                  href={downloadUrl}
-                  download={fileName}
-                  rel="noopener"
-                  className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-3.5 text-base font-medium text-black transition hover:bg-white/90 active:scale-[0.98]"
-                >
-                  <DownloadIcon />
-                  Download for Windows
-                </a>
-
-                <p className="mt-5 text-sm text-white/50">
-                  Requires Windows 10 or later
-                </p>
-                {mounted && (version || fileSize) && (
-                  <p className="mt-1 text-xs text-white/30">
-                    {version ? `Version ${version}` : ""}
-                    {version && fileSize ? " · " : ""}
-                    {fileSize}
-                  </p>
-                )}
-              </motion.div>
-            ) : (
-              <motion.div
-                key={os}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.25 }}
-                className="flex flex-col items-center"
-              >
-                <div className="rounded-2xl border border-white/10 bg-white/[0.02] px-8 py-10 text-center">
-                  <p className="text-lg text-white/80">
-                    Coming soon for {os === "macos" ? "macOS" : "Linux"}
-                  </p>
-                  <p className="mt-2 text-sm text-white/40">
-                    We&apos;re polishing it. For now, the Windows build is
-                    available.
-                  </p>
-                </div>
+        <div className="mt-12 flex w-full max-w-md flex-col items-center">
+          {os === "windows" ? (
+            <div className="flex w-full flex-col items-center">
+              <div className="flex w-full items-center justify-between gap-3 rounded-lg bg-neutral-100 px-4 py-2.5">
+                <code className="truncate font-mono text-sm text-neutral-800">
+                  {INSTALL_COMMAND}
+                </code>
                 <button
-                  onClick={() => setOs("windows")}
-                  className="mt-6 text-sm text-white/60 underline-offset-4 hover:text-white hover:underline"
+                  onClick={copyCommand}
+                  aria-label="Copy install command"
+                  className="shrink-0 rounded p-1 text-neutral-500 transition hover:bg-neutral-200 hover:text-neutral-900"
                 >
-                  Download for Windows instead →
+                  {copied ? <CheckIcon /> : <CopyIcon />}
                 </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </div>
+
+              <p className="mt-4 text-sm text-neutral-500">
+                paste this in PowerShell
+              </p>
+              <p className="my-4 text-sm text-neutral-400">or</p>
+
+              <a
+                href={downloadUrl}
+                download={fileName}
+                rel="noopener"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-black px-8 py-3.5 text-base font-medium text-white transition hover:bg-neutral-800 active:scale-[0.98]"
+              >
+                Download for Windows
+              </a>
+
+              <p className="mt-5 text-sm text-neutral-600">
+                Requires Windows 10 or later
+              </p>
+              {mounted && (version || fileSize) && (
+                <p className="mt-1 text-xs text-neutral-400">
+                  {version ? `Version ${version}` : ""}
+                  {version && fileSize ? " · " : ""}
+                  {fileSize}
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center">
+              <div className="rounded-xl border border-neutral-200 px-8 py-10 text-center">
+                <p className="text-lg text-neutral-800">
+                  Coming soon for {os === "macos" ? "macOS" : "Linux"}
+                </p>
+                <p className="mt-2 text-sm text-neutral-500">
+                  We&apos;re polishing it. For now, the Windows build is
+                  available.
+                </p>
+              </div>
+              <button
+                onClick={() => setOs("windows")}
+                className="mt-6 text-sm text-neutral-600 underline-offset-4 hover:text-neutral-900 hover:underline"
+              >
+                Download for Windows instead →
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -210,54 +176,64 @@ export default function DownloadPage() {
 
 function Header() {
   return (
-    <header className="flex items-center justify-between px-6 py-5 md:px-10">
-      <Link href="/" className="flex items-center gap-3">
-        <Image
-          src="/icon.png"
-          alt="LoudFlow"
-          width={32}
-          height={32}
-          priority
-          className="h-8 w-8"
-        />
-        <span className="text-base font-medium tracking-tight">LoudFlow</span>
-      </Link>
-      <nav className="flex items-center gap-6 text-sm text-white/60">
-        <Link
-          href="/download"
-          className="text-white transition hover:text-white"
-        >
-          Download
+    <header className="border-b border-neutral-200">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+        <Link href="/" className="flex items-center gap-3">
+          <Image
+            src="/icon.png"
+            alt="LoudFlow"
+            width={32}
+            height={32}
+            priority
+            className="h-8 w-8"
+          />
+          <span className="text-base font-medium tracking-tight">LoudFlow</span>
         </Link>
-        <a
-          href="https://github.com/lamddassds/LoudFlow-"
-          target="_blank"
-          rel="noreferrer"
-          className="hidden transition hover:text-white sm:inline"
-        >
-          GitHub
-        </a>
-      </nav>
+        <nav className="flex items-center gap-6 text-sm text-neutral-600">
+          <Link
+            href="/"
+            className="transition hover:text-neutral-900"
+          >
+            Home
+          </Link>
+          <Link
+            href="/download"
+            className="text-neutral-900"
+          >
+            Download
+          </Link>
+          <a
+            href="https://github.com/lamddassds/LoudFlow-"
+            target="_blank"
+            rel="noreferrer"
+            className="hidden transition hover:text-neutral-900 sm:inline"
+          >
+            GitHub
+          </a>
+        </nav>
+      </div>
     </header>
   );
 }
 
 function Footer() {
   return (
-    <footer className="flex items-center justify-between border-t border-white/5 px-6 py-5 text-xs text-white/30 md:px-10">
-      <span>© 2026 LoudFlow</span>
-      <div className="flex items-center gap-5">
-        <Link href="/download" className="transition hover:text-white/70">
-          Download
-        </Link>
-        <a
-          href="https://github.com/lamddassds/LoudFlow-"
-          target="_blank"
-          rel="noreferrer"
-          className="transition hover:text-white/70"
-        >
-          GitHub
-        </a>
+    <footer className="border-t border-neutral-200 py-6 text-xs text-neutral-500">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
+        <span>© {new Date().getFullYear()} LoudFlow</span>
+        <div className="flex items-center gap-5">
+          <Link href="/download" className="transition hover:text-neutral-900">
+            Download
+          </Link>
+          <a
+            href="https://github.com/lamddassds/LoudFlow-"
+            target="_blank"
+            rel="noreferrer"
+            className="transition hover:text-neutral-900"
+          >
+            GitHub
+          </a>
+        </div>
       </div>
     </footer>
   );
@@ -277,10 +253,10 @@ function OsTab({
   return (
     <button
       onClick={onClick}
-      className={`flex w-24 flex-col items-center gap-2 rounded-xl border px-4 py-4 transition md:w-28 ${
+      className={`flex w-24 flex-col items-center gap-2 rounded-xl px-4 py-4 transition md:w-28 ${
         active
-          ? "border-white/20 bg-white/[0.06] text-white"
-          : "border-transparent text-white/50 hover:bg-white/[0.03] hover:text-white/80"
+          ? "bg-neutral-100 text-neutral-900"
+          : "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900"
       }`}
     >
       <span className="h-7 w-7">{icon}</span>
@@ -304,13 +280,6 @@ function LinuxIcon() {
         fill="currentColor"
         d="M12 1.5c-2.6 0-4.3 2-4.3 4.5 0 1.2.3 2.1.7 2.9.3.5.5 1 .5 1.4 0 .4-.2.8-.5 1.1-1 1-2.8 2.8-2.8 5.3 0 2 1.7 3.3 3.9 3.7.6.1 1.2.1 1.6.2h.8c.4 0 1-.1 1.6-.2 2.2-.4 3.9-1.7 3.9-3.7 0-2.5-1.8-4.3-2.8-5.3-.3-.3-.5-.7-.5-1.1 0-.4.2-.9.5-1.4.4-.8.7-1.7.7-2.9 0-2.5-1.7-4.5-4.3-4.5z"
       />
-      <circle cx="10.3" cy="6.5" r="0.85" fill="#0a0a0a" />
-      <circle cx="13.7" cy="6.5" r="0.85" fill="#0a0a0a" />
-      <circle cx="10.4" cy="6.6" r="0.3" fill="#fff" />
-      <circle cx="13.8" cy="6.6" r="0.3" fill="#fff" />
-      <path d="M11.2 7.9 L12 9 L12.8 7.9 Z" fill="#f59e0b" />
-      <ellipse cx="10" cy="20.2" rx="1.9" ry="0.65" fill="#f59e0b" />
-      <ellipse cx="14" cy="20.2" rx="1.9" ry="0.65" fill="#f59e0b" />
     </svg>
   );
 }
@@ -349,27 +318,9 @@ function CheckIcon() {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="h-4 w-4 text-emerald-400"
-    >
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
-}
-
-function DownloadIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
       className="h-4 w-4"
     >
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-      <path d="M7 10l5 5 5-5" />
-      <path d="M12 15V3" />
+      <path d="M20 6 9 17l-5-5" />
     </svg>
   );
 }

@@ -34,7 +34,7 @@ const RELEASES_ROOT =
 export function downloadUrl(os: Exclude<OS, "unknown">, version: string): string {
   switch (os) {
     case "windows":
-      return `${RELEASES_ROOT}/LoudFlow-Setup-${version}.exe`;
+      return `${RELEASES_ROOT}/LoudFlow.Setup.${version}.exe`;
     case "mac":
       return `${RELEASES_ROOT}/LoudFlow-${version}.dmg`;
     case "linux":
