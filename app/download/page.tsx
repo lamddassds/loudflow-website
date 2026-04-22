@@ -1,8 +1,9 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import { HeroDoodle } from "@/components/Doodles";
 
 const RELEASES_API =
   "https://api.github.com/repos/lamddassds/Loudflow-updat/releases/latest";
@@ -77,165 +78,105 @@ export default function DownloadPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col bg-white text-neutral-900">
-      <Header />
+    <>
+      <Navbar />
+      <main className="flex min-h-[calc(100vh-4rem)] flex-col">
+        <div className="flex flex-1 flex-col items-center px-6 pt-16 pb-20">
+          <HeroDoodle className="h-20 w-auto text-neutral-900" />
 
-      <div className="flex flex-1 flex-col items-center px-6 py-20 md:py-24">
-        <h1 className="text-center text-4xl font-semibold tracking-tight md:text-5xl">
-          Download LoudFlow
-        </h1>
+          <h1 className="mt-8 text-center text-4xl font-semibold tracking-tight text-neutral-900 md:text-5xl">
+            Download LoudFlow
+          </h1>
 
-        <div className="mt-12 flex items-center gap-3 md:gap-5">
-          <OsTab
-            active={os === "macos"}
-            onClick={() => setOs("macos")}
-            label="macOS"
-            icon={<AppleIcon />}
-          />
-          <OsTab
-            active={os === "linux"}
-            onClick={() => setOs("linux")}
-            label="Linux"
-            icon={<LinuxIcon />}
-          />
-          <OsTab
-            active={os === "windows"}
-            onClick={() => setOs("windows")}
-            label="Windows"
-            icon={<WindowsIcon />}
-          />
-        </div>
+          <div className="mt-10 flex items-center gap-3 md:gap-5">
+            <OsTab
+              active={os === "macos"}
+              onClick={() => setOs("macos")}
+              label="macOS"
+              icon={<AppleIcon />}
+            />
+            <OsTab
+              active={os === "linux"}
+              onClick={() => setOs("linux")}
+              label="Linux"
+              icon={<LinuxIcon />}
+            />
+            <OsTab
+              active={os === "windows"}
+              onClick={() => setOs("windows")}
+              label="Windows"
+              icon={<WindowsIcon />}
+            />
+          </div>
 
-        <div className="mt-12 flex w-full max-w-md flex-col items-center">
-          {os === "windows" ? (
-            <div className="flex w-full flex-col items-center">
-              <div className="flex w-full items-center justify-between gap-3 rounded-lg bg-neutral-100 px-4 py-2.5">
-                <code className="truncate font-mono text-sm text-neutral-800">
-                  {INSTALL_COMMAND}
-                </code>
-                <button
-                  onClick={copyCommand}
-                  aria-label="Copy install command"
-                  className="shrink-0 rounded p-1 text-neutral-500 transition hover:bg-neutral-200 hover:text-neutral-900"
+          <div className="mt-10 flex w-full max-w-md flex-col items-center">
+            {os === "windows" ? (
+              <div className="flex w-full flex-col items-center">
+                <div className="flex w-full items-center justify-between gap-3 rounded-lg bg-neutral-100 px-4 py-2.5">
+                  <code className="truncate font-mono text-sm text-neutral-800">
+                    {INSTALL_COMMAND}
+                  </code>
+                  <button
+                    onClick={copyCommand}
+                    aria-label="Copy install command"
+                    className="shrink-0 rounded p-1 text-neutral-500 transition hover:bg-neutral-200 hover:text-neutral-900"
+                  >
+                    {copied ? <CheckIcon /> : <CopyIcon />}
+                  </button>
+                </div>
+
+                <p className="mt-4 text-sm text-neutral-500">
+                  paste this in PowerShell
+                </p>
+                <p className="my-4 text-sm text-neutral-400">or</p>
+
+                <a
+                  href={downloadUrl}
+                  download={fileName}
+                  rel="noopener"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-black px-8 py-3.5 text-base font-medium text-white transition hover:bg-neutral-800 active:scale-[0.98]"
                 >
-                  {copied ? <CheckIcon /> : <CopyIcon />}
+                  Download for Windows
+                </a>
+
+                <p className="mt-5 text-sm text-neutral-600">
+                  Requires Windows 10 or later
+                </p>
+                {mounted && (version || fileSize) && (
+                  <p className="mt-1 text-xs text-neutral-400">
+                    {version ? `Version ${version}` : ""}
+                    {version && fileSize ? " · " : ""}
+                    {fileSize}
+                  </p>
+                )}
+                <p className="mt-4 max-w-xs text-center text-xs text-neutral-400">
+                  Voice model (~1 GB) downloads on first launch
+                </p>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center">
+                <div className="rounded-xl border border-neutral-200 px-8 py-10 text-center">
+                  <p className="text-lg text-neutral-800">
+                    Coming soon for {os === "macos" ? "macOS" : "Linux"}
+                  </p>
+                  <p className="mt-2 text-sm text-neutral-500">
+                    We&apos;re polishing it. For now, the Windows build is
+                    available.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setOs("windows")}
+                  className="mt-6 text-sm text-neutral-600 underline-offset-4 hover:text-neutral-900 hover:underline"
+                >
+                  Download for Windows instead →
                 </button>
               </div>
-
-              <p className="mt-4 text-sm text-neutral-500">
-                paste this in PowerShell
-              </p>
-              <p className="my-4 text-sm text-neutral-400">or</p>
-
-              <a
-                href={downloadUrl}
-                download={fileName}
-                rel="noopener"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-black px-8 py-3.5 text-base font-medium text-white transition hover:bg-neutral-800 active:scale-[0.98]"
-              >
-                Download for Windows
-              </a>
-
-              <p className="mt-5 text-sm text-neutral-600">
-                Requires Windows 10 or later
-              </p>
-              {mounted && (version || fileSize) && (
-                <p className="mt-1 text-xs text-neutral-400">
-                  {version ? `Version ${version}` : ""}
-                  {version && fileSize ? " · " : ""}
-                  {fileSize}
-                </p>
-              )}
-            </div>
-          ) : (
-            <div className="flex flex-col items-center">
-              <div className="rounded-xl border border-neutral-200 px-8 py-10 text-center">
-                <p className="text-lg text-neutral-800">
-                  Coming soon for {os === "macos" ? "macOS" : "Linux"}
-                </p>
-                <p className="mt-2 text-sm text-neutral-500">
-                  We&apos;re polishing it. For now, the Windows build is
-                  available.
-                </p>
-              </div>
-              <button
-                onClick={() => setOs("windows")}
-                className="mt-6 text-sm text-neutral-600 underline-offset-4 hover:text-neutral-900 hover:underline"
-              >
-                Download for Windows instead →
-              </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
-
+      </main>
       <Footer />
-    </main>
-  );
-}
-
-function Header() {
-  return (
-    <header className="border-b border-neutral-200">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <Link href="/" className="flex items-center gap-3">
-          <Image
-            src="/icon.png"
-            alt="LoudFlow"
-            width={32}
-            height={32}
-            priority
-            className="h-8 w-8"
-          />
-          <span className="text-base font-medium tracking-tight">LoudFlow</span>
-        </Link>
-        <nav className="flex items-center gap-6 text-sm text-neutral-600">
-          <Link
-            href="/"
-            className="transition hover:text-neutral-900"
-          >
-            Home
-          </Link>
-          <Link
-            href="/download"
-            className="text-neutral-900"
-          >
-            Download
-          </Link>
-          <a
-            href="https://github.com/lamddassds/LoudFlow-"
-            target="_blank"
-            rel="noreferrer"
-            className="hidden transition hover:text-neutral-900 sm:inline"
-          >
-            GitHub
-          </a>
-        </nav>
-      </div>
-    </header>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="border-t border-neutral-200 py-6 text-xs text-neutral-500">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
-        <span>© {new Date().getFullYear()} LoudFlow</span>
-        <div className="flex items-center gap-5">
-          <Link href="/download" className="transition hover:text-neutral-900">
-            Download
-          </Link>
-          <a
-            href="https://github.com/lamddassds/LoudFlow-"
-            target="_blank"
-            rel="noreferrer"
-            className="transition hover:text-neutral-900"
-          >
-            GitHub
-          </a>
-        </div>
-      </div>
-    </footer>
+    </>
   );
 }
 

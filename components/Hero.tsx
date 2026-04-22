@@ -1,7 +1,8 @@
 "use client";
 
-import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
+import { HeroDoodle } from "./Doodles";
 
 const INSTALL_COMMAND = "irm https://loudflow.xyz/install.ps1 | iex";
 
@@ -17,23 +18,18 @@ export default function Hero() {
   }
 
   return (
-    <section className="pt-16 pb-24">
-      <div className="mx-auto max-w-4xl px-6 text-center">
-        <Image
-          src="/icon.png"
-          alt="LoudFlow"
-          width={96}
-          height={96}
-          priority
-          className="mx-auto h-24 w-24"
-        />
+    <section className="pt-20 pb-28">
+      <div className="mx-auto max-w-3xl px-6 text-center">
+        <HeroDoodle className="mx-auto h-28 w-auto text-neutral-900" />
 
-        <p className="mt-6 text-sm text-neutral-500">Hear anything, instantly</p>
+        <p className="mt-8 text-sm text-neutral-500">
+          Press <kbd className="rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-[11px] text-neutral-700">Ctrl+Space</kbd> to hear any text
+        </p>
 
-        <h1 className="mt-5 text-balance text-5xl font-semibold leading-[1.05] tracking-tight text-neutral-900 sm:text-6xl md:text-7xl">
-          The easiest way
+        <h1 className="mt-4 text-balance text-5xl font-semibold leading-[1.05] tracking-tight text-neutral-900 sm:text-6xl">
+          The easiest way to
           <br />
-          to read any text aloud
+          read any text aloud
         </h1>
 
         <div className="mt-10 flex flex-col items-center">
@@ -50,12 +46,12 @@ export default function Hero() {
 
           <p className="mt-5 text-sm text-neutral-500">
             paste this in PowerShell, or{" "}
-            <a
+            <Link
               href="/download"
               className="text-neutral-900 underline underline-offset-2 hover:no-underline"
             >
               download LoudFlow
-            </a>
+            </Link>
           </p>
         </div>
       </div>
