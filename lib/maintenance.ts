@@ -2,115 +2,42 @@
 // rebuilt. Real 503 + Retry-After so search engines treat it as temporary and
 // keep the old pages out of the index instead of replacing them with this one.
 //
-// EVERY VALUE BELOW IS THE APP'S OWN, not a web-design choice. The page has to
-// read as one surface of the Hub, per ui/design-law/LOUDFLOW_DESIGN_LAW.md in
-// the LoudFlowBKE repo:
+// A white screen and a line of text, on his instruction of 2026-09-10: no mark
+// of any kind. The speaker glyph an earlier version drew was not the LoudFlow
+// logo - his own drawing is, and it is not in this repo, so nothing stands in
+// for it here.
 //
-//   palette   app/src/hub/skeleton.css:108-154
-//             --sk-canvas #f5f4f0 (warm, NOT #fff - "that single choice is what
-//             stops the window reading as a spreadsheet"), --sk-card #fcfcfb,
-//             --sk-line #eeebe3, --sk-ink #16150f, --sk-ink-mid #55524a,
-//             --sk-ink-lo #71716e
-//   faces     skeleton.css:927  --sk-font   Figtree, Instrument Sans, Segoe UI
-//             skeleton.css:939  --sk-serif  EB Garamond - and design law R2:
-//             the serif is for NUMBERS AND THE WORDMARK ONLY
-//   radii     skeleton.css:716-720  4 content / 8 controls / 16 the page card
-//   type      design law R2  28/34 @600 title, 15/20 @600 section,
-//             14/20 body, 12/20 meta. 20px is the line-height of this app.
-//   stack     design law R1 (Wispr CardStack.module.scss:3-20) - ONE ring
-//             around a stack of sections, sections butted against each other,
-//             2px #eeebe3 between them, no gap, no second ring, no shadow
-//   rhythm    design law R5  8 title-to-content, 12 in-section,
-//             24 section-to-section, 32 page edge
-//   colour    design law R4 and his own rule: colour is data, the brand, or a
-//             live state. The teal dot is the live state. Nothing else on this
-//             page is coloured.
-//   motion    design law R8 - the dot breathes because it reports a state,
-//             nothing else moves, and prefers-reduced-motion stops that too.
+// The two values that are not web defaults: Figtree is the Hub's base face
+// (app/src/hub/skeleton.css:927) and #16150f is its ink (skeleton.css:125).
 
 const HTML = `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>LoudFlow — under construction</title>
+<title>LoudFlow — under maintenance</title>
 <meta name="robots" content="noindex, nofollow" />
-<meta name="description" content="LoudFlow is being rebuilt. The site is offline while a much newer version takes its place." />
+<meta name="description" content="LoudFlow is being rebuilt. Back soon." />
 <link rel="icon" href="/icon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=EB+Garamond:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600&display=swap" rel="stylesheet" />
 <style>
-  :root {
-    color-scheme: light;
-    --canvas: #f5f4f0;
-    --card: #fcfcfb;
-    --sunk: #f5f4f0;
-    --line: #eeebe3;
-    --ink: #16150f;
-    --ink-mid: #55524a;
-    --ink-lo: #71716e;
-    --teal: #034f46;
-    --font: "Figtree", "Instrument Sans", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
-    --serif: "EB Garamond", Georgia, serif;
-    --mono: "Cascadia Mono", Consolas, ui-monospace, monospace;
-    --r-ctl: 8px;
-    --r-lg: 16px;
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; min-height: 100%; }
+  :root { color-scheme: light; }
+  html, body { height: 100%; margin: 0; }
   body {
-    background: var(--canvas);
-    color: var(--ink);
-    font-family: var(--font);
-    font-size: 14px;
-    line-height: 20px;
-    font-feature-settings: "salt" on;
+    background: #ffffff;
+    color: #16150f;
+    font-family: "Figtree", "Segoe UI", system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    text-align: center;
     padding: 32px;
   }
-  ::selection { background: var(--ink); color: var(--card); }
-
-  .page { width: 100%; max-width: 720px; margin: auto 0; }
-
-  .card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: var(--r-lg);
-    overflow: hidden;
-  }
-
-  .head { padding: 32px 32px 24px; }
-
-  /* The stack sits INSIDE the page card's paper, the way HubPageLayout holds a
-     CardStack - otherwise its #f5f4f0 sections butt straight against the
-     #f5f4f0 canvas and the card has no visible edge below the head. */
-  .stack {
-    margin: 0 32px 32px;
-    border: 1px solid var(--line);
-    border-radius: var(--r-lg);
-    overflow: hidden;
-  }
-
-  .wordmark {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 24px;
-    color: var(--ink);
-  }
-  .wordmark svg { display: block; }
-  .wordmark span {
-    font-family: var(--serif);
-    font-size: 20px;
-    line-height: 20px;
-    letter-spacing: -0.02em;
-  }
-
   h1 {
     margin: 0 0 8px;
     font-size: 28px;
@@ -118,136 +45,17 @@ const HTML = `<!doctype html>
     font-weight: 600;
     letter-spacing: -0.02em;
   }
-  .lede { margin: 0; max-width: 56ch; color: var(--ink-mid); }
-
-  .row {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 24px;
-    padding: 24px;
-    background: var(--sunk);
-  }
-  /* R1: sections butted directly against each other, divided by a 2px line. */
-  .row + .row { border-top: 2px solid var(--line); }
-  .row h2 {
+  p {
     margin: 0;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 20px;
-    font-weight: 600;
-  }
-  .row p { margin: 0; color: var(--ink-lo); font-size: 12px; line-height: 20px; }
-  /* min-width:0 or the nowrap command inside sets this flex child's width and
-     pushes the whole row past the viewport - measured on a 375px phone. */
-  .row .txt { min-width: 0; }
-  .row .txt > * + * { margin-top: 12px; }
-
-  /* One line, and it scrolls in its own box rather than breaking after "irm"
-     on a phone - a command that wraps mid-flag reads as broken. */
-  code {
-    display: block;
-    max-width: 100%;
-    overflow-x: auto;
-    white-space: nowrap;
-    font-family: var(--mono);
-    font-size: 12px;
-    line-height: 20px;
-    color: var(--ink-mid);
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    padding: 0 6px;
-  }
-
-  .chip {
-    flex: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    line-height: 20px;
-    font-weight: 600;
-    color: var(--ink-lo);
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: var(--r-ctl);
-    padding: 2px 10px;
-    white-space: nowrap;
-  }
-  .dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--teal);
-    animation: breathe 2.8s ease-in-out infinite;
-  }
-  @keyframes breathe { 0%, 100% { opacity: .4; } 50% { opacity: 1; } }
-
-  footer {
-    width: 100%;
-    max-width: 720px;
-    padding-top: 24px;
-    font-size: 12px;
-    line-height: 20px;
-    color: var(--ink-lo);
-  }
-
-  @media (max-width: 560px) {
-    body { padding: 24px 16px; }
-    .head { padding: 24px 24px 24px; }
-    .stack { margin: 0 24px 24px; }
-    .row { flex-direction: column; align-items: flex-start; gap: 12px; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .dot { animation: none; }
+    color: #71716e;
   }
 </style>
 </head>
 <body>
-  <div class="page">
-    <div class="card">
-      <div class="head">
-        <div class="wordmark">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M3 7.5h2.6L10 4v12L5.6 12.5H3a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1Z"
-                  stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
-            <path d="M13 7a4.2 4.2 0 0 1 0 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-            <path d="M15.6 4.6a7.6 7.6 0 0 1 0 10.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-          </svg>
-          <span>LoudFlow</span>
-        </div>
-        <h1>LoudFlow is being rebuilt</h1>
-        <p class="lede">LoudFlow reads any text aloud &mdash; select it, press a hotkey, hear it.
-        The site is offline while a much newer version of the app takes its place.</p>
-      </div>
-
-      <div class="stack">
-      <div class="row">
-        <div class="txt">
-          <h2>The site is offline</h2>
-          <p>Every page here is parked. Nothing you can reach is the current version.</p>
-        </div>
-        <span class="chip"><span class="dot"></span>Under construction</span>
-      </div>
-
-      <div class="row">
-        <div class="txt">
-          <h2>The installer is paused</h2>
-          <p><code>irm https://loudflow.xyz/install.ps1 | iex</code></p>
-          <p>It prints a notice now instead of downloading the old build.</p>
-        </div>
-        <span class="chip">Paused</span>
-      </div>
-
-      <div class="row">
-        <div class="txt">
-          <h2>It comes back with the new version</h2>
-          <p>No date yet. This page is what changes when it is ready.</p>
-        </div>
-        <span class="chip">Soon</span>
-      </div>
-      </div>
-    </div>
-  </div>
-  <footer>&copy; 2026 LoudFlow</footer>
+  <h1>Under maintenance</h1>
+  <p>LoudFlow is being rebuilt. Back soon.</p>
 </body>
 </html>
 `;
