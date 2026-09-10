@@ -2,12 +2,11 @@
 
 > The easiest way to read any text aloud.
 
-<p>
-  <a href="https://loudflow.xyz"><strong>loudflow.xyz</strong></a> ·
-  <a href="https://loudflow.xyz/download">Download</a> ·
-  <a href="https://loudflow.xyz/features">Features</a> ·
-  <a href="https://loudflow.xyz/how-it-works">How it works</a>
-</p>
+> [!NOTE]
+> **The site is under construction.** [loudflow.xyz](https://loudflow.xyz) is
+> parked behind a maintenance notice while a much newer version of LoudFlow
+> takes its place. The previous site is kept on the
+> [`site-v1`](https://github.com/lamddassds/loudflow-website/tree/site-v1) branch.
 
 LoudFlow is a native Windows app that turns any text into natural-sounding speech.
 Select text anywhere — a browser, a PDF, your IDE, a chat — press `Ctrl+Space`, and listen.
