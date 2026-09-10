@@ -139,8 +139,14 @@ const HTML = `<!doctype html>
   .row p { margin: 0; color: var(--ink-lo); font-size: 12px; line-height: 20px; }
   .row .txt > * + * { margin-top: 12px; }
 
+  /* One line, and it scrolls in its own box rather than breaking after "irm"
+     on a phone - a command that wraps mid-flag reads as broken. */
   code {
-    display: inline-block;
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
     font-family: var(--mono);
     font-size: 12px;
     line-height: 20px;
