@@ -137,13 +137,15 @@ const HTML = `<!doctype html>
     font-weight: 600;
   }
   .row p { margin: 0; color: var(--ink-lo); font-size: 12px; line-height: 20px; }
+  /* min-width:0 or the nowrap command inside sets this flex child's width and
+     pushes the whole row past the viewport - measured on a 375px phone. */
+  .row .txt { min-width: 0; }
   .row .txt > * + * { margin-top: 12px; }
 
   /* One line, and it scrolls in its own box rather than breaking after "irm"
      on a phone - a command that wraps mid-flag reads as broken. */
   code {
     display: block;
-    width: fit-content;
     max-width: 100%;
     overflow-x: auto;
     white-space: nowrap;
