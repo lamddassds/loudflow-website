@@ -84,7 +84,17 @@ const HTML = `<!doctype html>
     overflow: hidden;
   }
 
-  .head { padding: 32px; }
+  .head { padding: 32px 32px 24px; }
+
+  /* The stack sits INSIDE the page card's paper, the way HubPageLayout holds a
+     CardStack - otherwise its #f5f4f0 sections butt straight against the
+     #f5f4f0 canvas and the card has no visible edge below the head. */
+  .stack {
+    margin: 0 32px 32px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+  }
 
   .wordmark {
     display: flex;
@@ -117,8 +127,9 @@ const HTML = `<!doctype html>
     gap: 24px;
     padding: 24px;
     background: var(--sunk);
-    border-top: 2px solid var(--line);
   }
+  /* R1: sections butted directly against each other, divided by a 2px line. */
+  .row + .row { border-top: 2px solid var(--line); }
   .row h2 {
     margin: 0;
     font-size: 15px;
@@ -173,7 +184,8 @@ const HTML = `<!doctype html>
 
   @media (max-width: 560px) {
     body { padding: 24px 16px; }
-    .head { padding: 24px; }
+    .head { padding: 24px 24px 24px; }
+    .stack { margin: 0 24px 24px; }
     .row { flex-direction: column; align-items: flex-start; gap: 12px; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -199,6 +211,7 @@ const HTML = `<!doctype html>
         The site is offline while a much newer version of the app takes its place.</p>
       </div>
 
+      <div class="stack">
       <div class="row">
         <div class="txt">
           <h2>The site is offline</h2>
@@ -222,6 +235,7 @@ const HTML = `<!doctype html>
           <p>No date yet. This page is what changes when it is ready.</p>
         </div>
         <span class="chip">Soon</span>
+      </div>
       </div>
     </div>
   </div>
