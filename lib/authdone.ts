@@ -42,12 +42,17 @@ import { createHash } from "crypto";
 // code out of the address bar, and it tries the handoff once by itself. If it
 // never runs, the page is still a page with a working button.
 
-const INK = "#16150f";
-const MUTED = "#6b6960";
-const GROUND = "#fbf7eb"; // the sign-in window's own backgroundColor, so the
-                          // browser tab and the app window share one ground
-const CANVAS = "#faf9f5";
-const LIFT = "#30302f"; // --sk-ink-lift, the app's measured hover step
+/* EVERY VALUE BELOW IS READ OUT OF THE APP, not chosen here. Somebody crossing
+ * from the sign-in window into this tab and back should not be able to tell
+ * that they changed programs — so the ground, the ink, the wordmark's size
+ * and the button's fill are the app's own, with the file they come from
+ * written beside them. `app/src/hub/skeleton.css` is the source. */
+const INK = "#16150f";       // --sk-ink
+const INK_MID = "#55524a";   // --sk-ink-mid, the app's secondary line
+const GROUND = "#fbf7eb";    // signin-window.js backgroundColor — literally the
+                             // colour of the window this tab was opened from
+const CANVAS = "#faf9f5";    // the label on a filled button
+const LIFT = "#30302f";      // --sk-ink-lift, its measured hover step
 
 /* The scheme Windows hands to the app. `deeplink.js` registers it; `auth.js`
  * parses it. One verb, and it is the only URL this page ever builds. */
@@ -99,16 +104,25 @@ function handoffUrl(url: URL): string {
   return parts.length ? `${APP_SCHEME}?${parts.join("&")}` : APP_SCHEME;
 }
 
-/* His own mark, redrawn: one tall rounded bar and three short ones, all
- * standing on the same line. `public/icon.png` is the same drawing in cream on
- * black; this is it in ink, because the page is cream. Inline, so the page
- * still makes no request. */
-const MARK = `<svg class="mark" width="34" height="34" viewBox="0 0 40 40" fill="${INK}" aria-hidden="true">
+/* THE LOCKUP, AND IT IS THE APP'S, NOT A NEW ONE.
+ *
+ * The visible word is "Flow", not "LoudFlow" — the mark itself draws the L.
+ * That is the wordmark decision of 2026-09-12 (`signin.js:463`), and
+ * `signin.css:134` sets the one treatment it is allowed anywhere: 26 / 26 /
+ * 600 / -0.02em, 8 px from the mark, in ink. A second size for the same word
+ * on a second screen is how a product ends up with two logos.
+ *
+ * The drawing is his own: one tall rounded bar and three short ones on a
+ * common line. `public/icon.png` is the same thing in cream on black; this is
+ * it in ink, because the page is cream. Inline, so the page still makes no
+ * request of anybody. */
+const LOCKUP = `<div class="brand">
+<svg width="26" height="26" viewBox="0 0 40 40" fill="${INK}" aria-hidden="true">
 <rect x="8" y="4" width="4.6" height="32" rx="2.3"/>
 <rect x="16.2" y="27.6" width="4.6" height="8.4" rx="2.3"/>
 <rect x="23.4" y="29.2" width="4.6" height="6.8" rx="2.3"/>
 <rect x="30.6" y="29.8" width="4.6" height="6.2" rx="2.3"/>
-</svg>`;
+</svg><span>Flow</span></div>`;
 
 /* WHAT WENT WRONG, IN WORDS — added 2026-09-18, hours after the page shipped.
  *
@@ -143,8 +157,9 @@ function render(url: URL): string {
 
   const ok = `
   <h1>You're signed in</h1>
-  <p>LoudFlow should open automatically. If it doesn't, select Open LoudFlow. You can close this window once the app has opened.</p>
-  <a class="btn" id="open" href="${esc(target)}">Open LoudFlow</a>`;
+  <p>LoudFlow should open by itself. If it doesn't, use the button.</p>
+  <a class="btn" id="open" href="${esc(target)}">Open LoudFlow</a>
+  <p class="after">You can close this tab once the app is open.</p>`;
 
   /* THE REFUSAL GETS A BUTTON TOO, and that is not symmetry for its own sake.
    * The app is sitting on its sign-in screen waiting for an answer; the
@@ -153,11 +168,11 @@ function render(url: URL): string {
    * tab, and the app waits out its fifteen seconds knowing nothing. */
   const bad = `
   <h1>${cancelled ? "Sign-in cancelled" : "Sign-in didn't work"}</h1>
-  <p>${cancelled
-      ? "Nothing was changed and no account was created."
-      : "Nothing was changed and no account was created. Try again from LoudFlow — if it keeps happening, the line below is what to send on."}</p>
+  <p>Nothing was changed and no account was created.${
+    cancelled ? "" : " Try again from LoudFlow."}</p>
   ${why ? `<p class="why">${esc(why)}</p>` : ""}
-  <a class="btn" id="open" href="${esc(target)}">Back to LoudFlow</a>`;
+  <a class="btn" id="open" href="${esc(target)}">Back to LoudFlow</a>
+  <p class="after">You can close this tab.</p>`;
 
   return `<!doctype html>
 <html lang="en">
@@ -178,23 +193,35 @@ function render(url: URL): string {
     display: flex; align-items: center; justify-content: center;
     padding: 32px 16px;
   }
-  main { max-width: 420px; text-align: center; }
-  .mark { display: block; margin: 0 auto 28px; }
-  h1 { margin: 0 0 10px; font-size: 22px; line-height: 28px; font-weight: 600; letter-spacing: -0.01em; }
-  p { margin: 0 0 24px; font-size: 14px; line-height: 22px; color: ${MUTED}; }
-  /* The machine's own words. Monospace so a code reads as a code, and a tint
-     of the ground so it sits apart from the sentence above it without
-     shouting — this is a line to copy, not a line to be alarmed by. */
+  main { width: 100%; max-width: 380px; text-align: center; }
+
+  /* THE APP'S ONE TREATMENT: signin.css:134 — 26 / 26 / 600 / -0.02em, 8 px
+     from the mark. Nothing here invents a second one. */
+  .brand { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 32px; }
+  .brand span { font-size: 26px; line-height: 26px; font-weight: 600; letter-spacing: -0.02em; }
+
+  /* 28 / 34 / 600, the same .sg-title the sign-in window draws. */
+  h1 { margin: 0 0 8px; font-size: 28px; line-height: 34px; font-weight: 600; letter-spacing: -0.01em; }
+  /* 14 / 20 on --sk-ink-mid, the same .sg-lead. text-wrap: balance for the
+     reason the app gives: a short tail must not sit alone on the last row. */
+  p { margin: 0 0 28px; font-size: 14px; line-height: 20px; color: ${INK_MID}; text-wrap: balance; }
+
+  /* The machine's own words — a line to copy, not a line to be alarmed by.
+     Monospace so a code reads as a code, on a tint of the ground so it sits
+     apart from the sentence without shouting. */
   .why {
     font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
     font-size: 12px; line-height: 19px; color: ${INK};
     background: rgba(22, 21, 15, 0.05);
-    border-radius: 6px; padding: 10px 12px;
-    margin: -8px 0 24px; word-break: break-word; text-align: left;
+    border-radius: 8px; padding: 10px 12px;
+    margin: -10px 0 28px; word-break: break-word; text-align: left;
   }
+
+  /* --sk-ctl-h 36, --sk-r-ctl 8, and the ink fill hub-kit.css gives
+     .hk-btn--primary: "the primary is ink and never the accent". */
   .btn {
     display: inline-flex; align-items: center; justify-content: center;
-    min-height: 40px; padding: 0 20px;
+    min-height: 36px; padding: 0 16px;
     background: ${INK}; color: ${CANVAS};
     border: 1px solid ${INK}; border-radius: 8px;
     font-size: 14px; font-weight: 600; line-height: 20px;
@@ -203,11 +230,20 @@ function render(url: URL): string {
   .btn:hover { background: ${LIFT}; border-color: ${LIFT}; }
   .btn:active { transform: scale(0.97); }
   .btn:focus-visible { outline: 2px solid ${INK}; outline-offset: 2px; }
+
+  /* The quiet line after the action. Half a step down from the lead, because
+     it is the one sentence nobody has to read. */
+  .after { margin: 20px 0 0; font-size: 13px; line-height: 19px; opacity: 0.75; }
+
+  @media (max-width: 420px) {
+    h1 { font-size: 24px; line-height: 30px; }
+    .brand { margin-bottom: 26px; }
+  }
 </style>
 </head>
 <body>
 <main>
-${MARK}${failed ? bad : ok}
+${LOCKUP}${failed ? bad : ok}
 </main>
 <script>${SCRIPT}</script>
 </body>
