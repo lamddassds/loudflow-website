@@ -110,18 +110,54 @@ const MARK = `<svg class="mark" width="34" height="34" viewBox="0 0 40 40" fill=
 <rect x="30.6" y="29.8" width="4.6" height="6.2" rx="2.3"/>
 </svg>`;
 
+/* WHAT WENT WRONG, IN WORDS — added 2026-09-18, hours after the page shipped.
+ *
+ * The first version of this page said "Sign-in cancelled" and nothing else. The
+ * owner hit it on his own first attempt and wrote: "Ich bin jetzt ein bisschen
+ * verwirrt. Hab ich was vergessen zu machen, oder was liegt es jetzt?"
+ *
+ * That is the page's fault, not his. It had the reason — Supabase puts it in
+ * the query — and threw it away. A refusal a person cannot read is a refusal
+ * they cannot act on, and it is also the one thing a support conversation needs
+ * to start from.
+ *
+ * `access_denied` GETS ITS OWN HEADLINE because it is the ordinary one: it is
+ * what Google sends when somebody presses Cancel, and calling that "didn't
+ * work" would file a decision as a fault. Everything else is a fault.
+ *
+ * The description is shown as it arrived, escaped and cut to 300 characters.
+ * It is written by Google and Supabase, not by us — so it is data on a page
+ * that already treats its whole query as hostile (rule 2 in the header). */
+function reason(url: URL): string {
+  const code = (url.searchParams.get("error") || "").slice(0, 64);
+  const desc = (url.searchParams.get("error_description") || "").slice(0, 300);
+  if (desc && code) return `${desc} (${code})`;
+  return desc || code;
+}
+
 function render(url: URL): string {
   const failed = url.searchParams.has("error");
+  const cancelled = url.searchParams.get("error") === "access_denied";
   const target = handoffUrl(url);
+  const why = reason(url);
 
   const ok = `
   <h1>You're signed in</h1>
   <p>LoudFlow should open automatically. If it doesn't, select Open LoudFlow. You can close this window once the app has opened.</p>
   <a class="btn" id="open" href="${esc(target)}">Open LoudFlow</a>`;
 
+  /* THE REFUSAL GETS A BUTTON TOO, and that is not symmetry for its own sake.
+   * The app is sitting on its sign-in screen waiting for an answer; the
+   * `loudflow://auth?error=…` URL IS the answer, and `signin.js` has a state
+   * built to draw it. Without this button the refusal stops here, in a browser
+   * tab, and the app waits out its fifteen seconds knowing nothing. */
   const bad = `
-  <h1>Sign-in cancelled</h1>
-  <p>Nothing was changed and no account was created. Go back to LoudFlow and try again — you can close this window.</p>`;
+  <h1>${cancelled ? "Sign-in cancelled" : "Sign-in didn't work"}</h1>
+  <p>${cancelled
+      ? "Nothing was changed and no account was created."
+      : "Nothing was changed and no account was created. Try again from LoudFlow — if it keeps happening, the line below is what to send on."}</p>
+  ${why ? `<p class="why">${esc(why)}</p>` : ""}
+  <a class="btn" id="open" href="${esc(target)}">Back to LoudFlow</a>`;
 
   return `<!doctype html>
 <html lang="en">
@@ -146,6 +182,16 @@ function render(url: URL): string {
   .mark { display: block; margin: 0 auto 28px; }
   h1 { margin: 0 0 10px; font-size: 22px; line-height: 28px; font-weight: 600; letter-spacing: -0.01em; }
   p { margin: 0 0 24px; font-size: 14px; line-height: 22px; color: ${MUTED}; }
+  /* The machine's own words. Monospace so a code reads as a code, and a tint
+     of the ground so it sits apart from the sentence above it without
+     shouting — this is a line to copy, not a line to be alarmed by. */
+  .why {
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: 12px; line-height: 19px; color: ${INK};
+    background: rgba(22, 21, 15, 0.05);
+    border-radius: 6px; padding: 10px 12px;
+    margin: -8px 0 24px; word-break: break-word; text-align: left;
+  }
   .btn {
     display: inline-flex; align-items: center; justify-content: center;
     min-height: 40px; padding: 0 20px;
