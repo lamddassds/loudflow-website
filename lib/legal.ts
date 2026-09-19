@@ -16,9 +16,15 @@
 // notice instead of the document.
 //
 // WRITTEN TO BE TRUE TODAY. Where a feature is not switched on yet, the page
-// says so rather than describing a future as a fact — the sync section is the
-// one that matters, and it is marked. Drafted by the build, NOT reviewed by a
-// lawyer, and the owner knows that.
+// says so rather than describing a future as a fact. Drafted by the build, NOT
+// reviewed by a lawyer, and the owner knows that.
+//
+// 2026-09-19 — LOCAL FIRST. The app no longer uploads for a one-computer
+// account; a second computer is approved on the first, the approval dialog
+// names the encrypted cloud copy before anything is uploaded, and the
+// database keeps which wording was agreed to and when (LoudFlowBKE
+// app/src/main/sync.js CONSENT_VERSION, supabase/schema.sql devices).
+// Resend, which sends the sign-in code, was missing from "who else".
 
 const INK = "#16150f";
 const MUTED = "#71716e";
@@ -37,37 +43,42 @@ const CONTACT = "loudflow.app@gmail.com";
 export const PRIVACY: Doc = {
   slug: "privacy",
   title: "Privacy",
-  updated: "17 September 2026",
+  updated: "19 September 2026",
   lead:
-    "LoudFlow reads text aloud on your own computer. An account is optional, " +
+    "LoudFlow reads text aloud on your own computer. You sign in with an account, " +
     "and we keep as little as a working account allows.",
   sections: [
     {
       h: "The short version",
       p: [
-        "The text you have read aloud, the audio LoudFlow produces and the voice models it uses never leave your computer for us to see. There is no analytics, no tracking, no advertising and no profiling anywhere in the app or on this site.",
-        "If you sign in, we know your email address. If you switch on sync, we also hold the short voice recordings you saved and the texts you asked LoudFlow to read — so that a second computer can have them too.",
+        "The text you have read aloud, the audio LoudFlow produces and the voice models it uses stay on your computer. There is no analytics, no tracking, no advertising and no profiling anywhere in the app or on this site.",
+        "We know your email address. As long as you use LoudFlow on one computer, your voices and texts never leave it.",
+        "Only when you approve a second computer of your own — and LoudFlow asks you before anything is uploaded — do your saved voices and texts travel between your computers, end-to-end encrypted. The key exists only on your computers; we cannot read what we store.",
         "Deleting your account deletes all of it, at once and for good.",
       ],
     },
     {
       h: "What stays on your computer",
       p: [
-        "Everything the app does to make speech: the text you paste or select, the audio it generates, the voices it ships with, the reference recordings you make, and the diagnostic log it keeps for itself. None of it is sent anywhere. LoudFlow speaks offline; that is the product, not a setting.",
+        "Everything the app does to make speech: the text you paste or select, the audio it generates, the voices it ships with, the reference recordings you make, and the diagnostic log it keeps for itself. LoudFlow speaks offline; that is the product, not a setting.",
+        "Each account keeps its own voices, texts and settings. Two accounts on one computer do not see each other's things, and a new account starts empty.",
       ],
     },
     {
       h: "What we hold when you sign in",
       p: [
-        "Your email address, an account identifier, and the times you signed in. That is what an account is. We use it for one purpose — to know which saved voices and texts are yours — and for nothing else. We do not email you marketing.",
+        "Your email address, an account identifier, and the times you signed in. That is what an account is. We do not email you marketing.",
+        "For each computer you use LoudFlow on, a short record: the computer's name as Windows reports it, its operating system and app version, a public key, and when it was last seen. It holds no content. We use it for one purpose — to know which computers are yours — and for nothing else.",
       ],
     },
     {
-      h: "What we hold when you switch sync on",
+      h: "What we hold when you use a second computer",
       p: [
-        "Not switched on yet. It is being built, and this section describes it in advance so nothing arrives unannounced.",
-        "When it is on, LoudFlow uploads the voices you saved — a short reference recording of about thirty seconds, its name, its language and the settings measured from it — and the texts you had read aloud, together with the date and which voice read them. It does not upload the generated audio.",
-        "A voice recording is personal data, and where it is somebody else's voice it is their personal data. Only upload a recording you made yourself or have permission to use.",
+        "Nothing, until you say so. When you sign in on another computer, the first one asks you to approve it, and that question says — before anything is uploaded — that your saved voices and texts will from then on be stored in the cloud, end-to-end encrypted. Approving is your consent. We record which wording you agreed to and when.",
+        "What travels: the voices you saved — the short reference recording, its name, language and transcript, and the settings measured from it — and the texts you had read aloud, with their date. Not the generated audio.",
+        "How: everything is encrypted on your computer before it is uploaded (AES-256-GCM), with a key that only your approved computers hold; the key passes from one of your computers to the next sealed with that computer's own key. We store only the encrypted files and cannot open them.",
+        "When it goes: if you are back to one computer — because you removed the other one in the app, or it has not been used for 60 days — the encrypted copy is deleted at the next check. Removing a computer also withdraws its approval: to come back it has to be approved again.",
+        "A voice recording is personal data, and where it is somebody else's voice it is their personal data. Only save a recording you made yourself or have permission to use.",
       ],
     },
     {
@@ -80,6 +91,7 @@ export const PRIVACY: Doc = {
       h: "Who else is involved",
       p: [
         "Google, only if you choose to sign in with Google: they tell us your email address and name, and they know that you signed in to LoudFlow. Their handling of that is covered by Google's own privacy policy.",
+        "Resend, only if you sign in with your email address: it delivers the email with your sign-in code, and for that it receives your email address and the code.",
         "Supabase, as described above. Nobody else. We do not sell, rent or share your data, and we do not train anything on your voice or your texts.",
       ],
     },
@@ -92,13 +104,13 @@ export const PRIVACY: Doc = {
     {
       h: "How long we keep it",
       p: [
-        "Until you delete it. Deleting your account from inside LoudFlow removes your rows, your uploaded recordings and the account itself in one step — we hold no separate copy and no archive. Backups of the database are kept for a short period by our host and roll off by themselves.",
+        "Until you delete it. Deleting your account from inside LoudFlow removes your rows, your computer records, your encrypted copies and the account itself in one step — we hold no separate copy and no archive. Backups of the database are kept for a short period by our host and roll off by themselves.",
       ],
     },
     {
       h: "Your rights",
       p: [
-        "Under Swiss data protection law and the GDPR you can ask what we hold about you, have it corrected, have it deleted, have a copy of it, or object to how it is used. Write to " +
+        "Under Swiss data protection law and the GDPR you can ask what we hold about you, have it corrected, have it deleted, have a copy of it, or object to how it is used. You can withdraw your consent to the encrypted copy at any time by removing your other computers in the app. Write to " +
           CONTACT +
           " and we will answer within thirty days. You may also complain to your data protection authority.",
         "The controller is the maker of LoudFlow, reachable at " + CONTACT + ". A postal address is available on request.",
@@ -120,7 +132,7 @@ export const PRIVACY: Doc = {
 export const TERMS: Doc = {
   slug: "terms",
   title: "Terms",
-  updated: "17 September 2026",
+  updated: "19 September 2026",
   lead:
     "The rules for using LoudFlow. Short, because the app does little that " +
     "needs rules — except one thing, and that one is in bold.",
@@ -137,6 +149,7 @@ export const TERMS: Doc = {
         "One account per person, and it is yours to look after. Tell us at " +
           CONTACT +
           " if you think somebody else is using it.",
+        "Each account has its own voices, texts and settings; on a shared computer another account starts empty. Approve only computers that belong to you.",
       ],
     },
     {
@@ -148,7 +161,7 @@ export const TERMS: Doc = {
     {
       h: "Your content",
       p: [
-        "Texts you paste, recordings you make and audio LoudFlow produces belong to you. We store them only to give them back to you on another computer, and we do not use them to train models, our own or anybody else's.",
+        "Texts you paste, recordings you make and audio LoudFlow produces belong to you. We store them only once you approve a second computer, only encrypted, and only to give them back to you there — and we do not use them to train models, our own or anybody else's.",
       ],
     },
     {
