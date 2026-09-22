@@ -19,11 +19,12 @@ import { createHash } from "crypto";
 // ---------------------------------------------------------------------------
 // THE FOUR RULES THIS FILE FOLLOWS, BECAUSE THE URL CARRIES AN AUTH CODE
 //
-// 1. IT LOADS NOTHING FROM ANYWHERE. No font, no icon file, no analytics, no
-//    framework on the client. The mark is inline SVG and the type is the
-//    system stack. A page that makes no outbound request cannot leak the code
-//    in a referrer, a DNS lookup or a third party's log — and the CSP below is
-//    `default-src 'none'`, which is only honest because of this rule.
+// 1. IT LOADS NOTHING FROM ANYBODY ELSE. No font, no analytics, no framework
+//    on the client, no third party. The mark is inline SVG and the type is the
+//    system stack. Since 2026-09-22 it loads ONE photograph, from this same
+//    site (`public/img/`), with `referrer-policy: no-referrer` - so the request
+//    carries no Referer, goes to nobody new, and the CSP allows exactly
+//    `img-src 'self'` and nothing else. The code still cannot leak.
 // 2. NOTHING FROM THE QUERY IS REFLECTED AS IT ARRIVED. Five parameter names
 //    are allowed through, each value is re-encoded with `encodeURIComponent`,
 //    and the result is escaped again for the attribute. Anything else in the
@@ -49,8 +50,9 @@ import { createHash } from "crypto";
  * written beside them. `app/src/hub/skeleton.css` is the source. */
 const INK = "#16150f";       // --sk-ink
 const INK_MID = "#55524a";   // --sk-ink-mid, the app's secondary line
-const GROUND = "#fbf7eb";    // signin-window.js backgroundColor — literally the
+const GROUND = "#ffffff";    // signin-window.js backgroundColor — literally the
                              // colour of the window this tab was opened from
+                             // (white since the app's 2026-09-18 sign-in)
 const CANVAS = "#faf9f5";    // the label on a filled button
 const LIFT = "#30302f";      // --sk-ink-lift, its measured hover step
 
@@ -103,6 +105,15 @@ function handoffUrl(url: URL): string {
   }
   return parts.length ? `${APP_SCHEME}?${parts.join("&")}` : APP_SCHEME;
 }
+
+/* THE PHOTOGRAPH HALF — 2026-09-22. Lauro, after the app's sign-in became a
+ * Mobbin-style split (column + one photograph): "im Browser selbst, wo das
+ * Login stattfindet, auch". So this tab now has the same shape as the window
+ * it was opened from. Both photographs are Unsplash-licensed and are the same
+ * files the app ships (`app/src/hub/onboarding/photos/README.md` in the app
+ * repo has their ids): `done.jpg` for a success, `browser.jpg` for a refusal. */
+const PHOTO_OK = "/img/signed-in.jpg";
+const PHOTO_BAD = "/img/sign-in-failed.jpg";
 
 /* THE LOCKUP, AND IT IS THE APP'S, NOT A NEW ONE.
  *
@@ -190,9 +201,22 @@ function render(url: URL): string {
     font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    display: flex; align-items: center; justify-content: center;
-    padding: 32px 16px;
+    display: flex;
+    box-sizing: border-box;
   }
+  /* THE SPLIT: the column in the left half, the photograph inset in the
+     right one with the app's 10 px and 14 px radius (signin.css .sg-art). */
+  .col {
+    flex: 1 1 50%; min-width: 0;
+    display: flex; align-items: center; justify-content: center;
+    padding: 32px 16px; box-sizing: border-box;
+  }
+  .art {
+    flex: 1 1 50%; min-width: 0; margin: 10px 10px 10px 0;
+    border-radius: 14px; overflow: hidden; background: #f3f2ee;
+  }
+  .art img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+  @media (max-width: 820px) { .art { display: none; } }
   main { width: 100%; max-width: 380px; text-align: center; }
 
   /* THE APP'S ONE TREATMENT: signin.css:134 — 26 / 26 / 600 / -0.02em, 8 px
@@ -242,9 +266,10 @@ function render(url: URL): string {
 </style>
 </head>
 <body>
-<main>
+<div class="col"><main>
 ${LOCKUP}${failed ? bad : ok}
-</main>
+</main></div>
+<div class="art" aria-hidden="true"><img src="${failed ? PHOTO_BAD : PHOTO_OK}" alt="" /></div>
 <script>${SCRIPT}</script>
 </body>
 </html>
@@ -262,11 +287,12 @@ export function authDoneResponse(req: Request): Response {
       "x-robots-tag": "noindex, nofollow",
       "referrer-policy": "no-referrer",
       "x-content-type-options": "nosniff",
-      // Honest only because the page loads nothing: no font, no image file, no
-      // client framework. The one script is allowed by its hash, so an injected
-      // one would not run even if rule 2 above were ever broken.
+      // Honest only because the page loads nothing from anybody else: no font,
+      // no client framework, one photograph from this same site. The one script
+      // is allowed by its hash, so an injected one would not run even if rule 2
+      // above were ever broken.
       "content-security-policy":
-        "default-src 'none'; style-src 'unsafe-inline'; " +
+        "default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; " +
         `script-src 'sha256-${SCRIPT_HASH}'; ` +
         "base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
     },
