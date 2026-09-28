@@ -19,12 +19,13 @@ import { createHash } from "crypto";
 // ---------------------------------------------------------------------------
 // THE FOUR RULES THIS FILE FOLLOWS, BECAUSE THE URL CARRIES AN AUTH CODE
 //
-// 1. IT LOADS NOTHING FROM ANYBODY ELSE. No font, no analytics, no framework
-//    on the client, no third party. The mark is inline SVG and the type is the
-//    system stack. Since 2026-09-22 it loads ONE photograph, from this same
-//    site (`public/img/`), with `referrer-policy: no-referrer` - so the request
-//    carries no Referer, goes to nobody new, and the CSP allows exactly
-//    `img-src 'self'` and nothing else. The code still cannot leak.
+// 1. IT LOADS NOTHING FROM ANYBODY ELSE. No analytics, no framework on the
+//    client, no third party. The mark is inline SVG. Since 2026-09-28 it loads
+//    Lou's drawings (`public/img/lou-*.svg`) and the app's serif
+//    (`public/fonts/`), all from this same site, with `referrer-policy:
+//    no-referrer` - so no request carries a Referer or goes to anybody new, and
+//    the CSP allows exactly `img-src 'self'` and `font-src 'self'`. The code
+//    still cannot leak.
 // 2. NOTHING FROM THE QUERY IS REFLECTED AS IT ARRIVED. Five parameter names
 //    are allowed through, each value is re-encoded with `encodeURIComponent`,
 //    and the result is escaped again for the attribute. Anything else in the
@@ -50,9 +51,10 @@ import { createHash } from "crypto";
  * written beside them. `app/src/hub/skeleton.css` is the source. */
 const INK = "#16150f";       // --sk-ink
 const INK_MID = "#55524a";   // --sk-ink-mid, the app's secondary line
-const GROUND = "#ffffff";    // signin-window.js backgroundColor — literally the
-                             // colour of the window this tab was opened from
-                             // (white since the app's 2026-09-18 sign-in)
+const GROUND = "#fbfaf8";    // the sign-in column's paper (signin.css .sg-panel)
+                             // since the app's 2026-09-28 redo
+const PAPER = "#f3efe6";     // the stage half's ground (signin.css .sg-art)
+const TEAL = "#034f46";      // --sk-primary: the brand, the one italic word
 const CANVAS = "#faf9f5";    // the label on a filled button
 const LIFT = "#30302f";      // --sk-ink-lift, its measured hover step
 
@@ -106,14 +108,24 @@ function handoffUrl(url: URL): string {
   return parts.length ? `${APP_SCHEME}?${parts.join("&")}` : APP_SCHEME;
 }
 
-/* THE PHOTOGRAPH HALF — 2026-09-22. Lauro, after the app's sign-in became a
- * Mobbin-style split (column + one photograph): "im Browser selbst, wo das
- * Login stattfindet, auch". So this tab now has the same shape as the window
- * it was opened from. Both photographs are Unsplash-licensed and are the same
- * files the app ships (`app/src/hub/onboarding/photos/README.md` in the app
- * repo has their ids): `done.jpg` for a success, `browser.jpg` for a refusal. */
-const PHOTO_OK = "/img/signed-in.jpg";
-const PHOTO_BAD = "/img/sign-in-failed.jpg";
+/* LOU, NOT A PHOTOGRAPH — 2026-09-28. The app's sign-in dropped its Unsplash
+ * photographs for the mascot and a stage built in code (the "login redo",
+ * `ui/login-redo/VISION.md` in the app repo). This tab keeps the window's
+ * shape: in the column, Lou in the pose of the moment (happy when it worked,
+ * puzzled when it didn't); in the other half, Lou listening on the stage's
+ * paper. The SVGs animate themselves with SMIL — no script — and come from
+ * this same site, so `img-src 'self'` still covers everything. */
+const LOU_OK = "/img/lou-happy.svg";
+const LOU_BAD = "/img/lou-puzzled.svg";
+
+/* THE LIVING HALF — 2026-09-28, the same one the app's window shows: the
+ * "Die Stimme" stage (a voice marbling on paper, a line read aloud) with Lou as
+ * a live rig in the pose of the moment. Four files from this same site under
+ * /stage/, mounted by /stage/mount.js — so `script-src 'self'` plus the one
+ * hashed inline script below is the whole script policy, and nothing loads
+ * from anybody else. Without script the drawn Lou above stays in its place. */
+const STAGE_CSS = ["/stage/stage.css", "/stage/lou-rig.css"];
+const STAGE_JS = ["/stage/lou-rig.js", "/stage/stage.js", "/stage/mount.js"];
 
 /* THE LOCKUP, AND IT IS THE APP'S, NOT A NEW ONE.
  *
@@ -167,7 +179,7 @@ function render(url: URL): string {
   const why = reason(url);
 
   const ok = `
-  <h1>You're signed in</h1>
+  <h1>You're signed <em>in</em></h1>
   <p>LoudFlow should open by itself. If it doesn't, use the button.</p>
   <a class="btn" id="open" href="${esc(target)}">Open LoudFlow</a>
   <p class="after">You can close this tab once the app is open.</p>`;
@@ -178,7 +190,7 @@ function render(url: URL): string {
    * built to draw it. Without this button the refusal stops here, in a browser
    * tab, and the app waits out its fifteen seconds knowing nothing. */
   const bad = `
-  <h1>${cancelled ? "Sign-in cancelled" : "Sign-in didn't work"}</h1>
+  <h1>${cancelled ? "Sign-in <em>cancelled</em>" : "Sign-in didn't <em>work</em>"}</h1>
   <p>Nothing was changed and no account was created.${
     cancelled ? "" : " Try again from LoudFlow."}</p>
   ${why ? `<p class="why">${esc(why)}</p>` : ""}
@@ -193,7 +205,15 @@ function render(url: URL): string {
 <meta name="robots" content="noindex, nofollow" />
 <meta name="referrer" content="no-referrer" />
 <title>LoudFlow</title>
+${STAGE_CSS.map((href) => `<link rel="stylesheet" href="${href}" />`).join("\n")}
 <style>
+  /* EB Garamond, the app's display face, from this same site (OFL licence in
+     /fonts/OFL-EBGaramond.txt) — so the title here is the title there. */
+  @font-face {
+    font-family: "EB Garamond";
+    src: url("/fonts/EBGaramond-Variable.woff2") format("woff2");
+    font-weight: 400 800; font-style: normal; font-display: swap;
+  }
   :root { color-scheme: light; }
   html, body { margin: 0; height: 100%; background: ${GROUND}; }
   body {
@@ -204,18 +224,22 @@ function render(url: URL): string {
     display: flex;
     box-sizing: border-box;
   }
-  /* THE SPLIT: the column in the left half, the photograph inset in the
-     right one with the app's 10 px and 14 px radius (signin.css .sg-art). */
+  /* THE SPLIT: the column on the left, the stage full bleed on the right —
+     46 / 54, the app window's own proportion (signin.css .sg-panel/.sg-art). */
   .col {
     flex: 1 1 50%; min-width: 0;
     display: flex; align-items: center; justify-content: center;
     padding: 32px 16px; box-sizing: border-box;
   }
+  /* The stage half, full bleed like the app's (signin.css .sg-art). */
   .art {
-    flex: 1 1 50%; min-width: 0; margin: 10px 10px 10px 0;
-    border-radius: 14px; overflow: hidden; background: #f3f2ee;
+    position: relative;
+    flex: 1 1 54%; min-width: 0; overflow: hidden; background: ${PAPER};
+    display: flex; align-items: center; justify-content: center;
   }
-  .art img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+  .col { flex-basis: 46%; }
+  /* The drawn Lou, until the stage mounts (or for good, without script). */
+  .art > img { position: absolute; right: 6%; bottom: 5%; width: min(38%, 300px); }
   @media (max-width: 820px) { .art { display: none; } }
   main { width: 100%; max-width: 380px; text-align: center; }
 
@@ -225,15 +249,23 @@ function render(url: URL): string {
   .brand span { font-size: 26px; line-height: 26px; font-weight: 600; letter-spacing: -0.02em; }
 
   /* 28 / 34 / 600, the same .sg-title the sign-in window draws. */
-  h1 { margin: 0 0 8px; font-size: 28px; line-height: 34px; font-weight: 600; letter-spacing: -0.01em; }
+  /* The app's serif welcome (signin.css .sg-title): EB Garamond 48, one word
+     in italic, in the brand teal. */
+  h1 {
+    margin: 0 0 10px; font-family: "EB Garamond", Georgia, serif;
+    font-size: 48px; line-height: 52px; font-weight: 400; letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  h1 em { font-style: italic; color: ${TEAL}; }
   /* 14 / 20 on --sk-ink-mid, the same .sg-lead. text-wrap: balance for the
      reason the app gives: a short tail must not sit alone on the last row. */
-  p { margin: 0 0 28px; font-size: 14px; line-height: 20px; color: ${INK_MID}; text-wrap: balance; }
+  /* Scoped to the column: the stage's own reading line is a <p> too. */
+  main p { margin: 0 0 28px; font-size: 14px; line-height: 20px; color: ${INK_MID}; text-wrap: balance; }
 
   /* The machine's own words — a line to copy, not a line to be alarmed by.
      Monospace so a code reads as a code, on a tint of the ground so it sits
      apart from the sentence without shouting. */
-  .why {
+  main .why {
     font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
     font-size: 12px; line-height: 19px; color: ${INK};
     background: rgba(22, 21, 15, 0.05);
@@ -257,10 +289,10 @@ function render(url: URL): string {
 
   /* The quiet line after the action. Half a step down from the lead, because
      it is the one sentence nobody has to read. */
-  .after { margin: 20px 0 0; font-size: 13px; line-height: 19px; opacity: 0.75; }
+  main .after { margin: 20px 0 0; font-size: 13px; line-height: 19px; opacity: 0.75; }
 
   @media (max-width: 420px) {
-    h1 { font-size: 24px; line-height: 30px; }
+    h1 { font-size: 38px; line-height: 42px; }
     .brand { margin-bottom: 26px; }
   }
 </style>
@@ -269,8 +301,9 @@ function render(url: URL): string {
 <div class="col"><main>
 ${LOCKUP}${failed ? bad : ok}
 </main></div>
-<div class="art" aria-hidden="true"><img src="${failed ? PHOTO_BAD : PHOTO_OK}" alt="" /></div>
+<div class="art" id="stage" aria-hidden="true" data-pose="${failed ? "puzzled" : "happy"}"><img src="${failed ? LOU_BAD : LOU_OK}" alt="" /></div>
 <script>${SCRIPT}</script>
+${STAGE_JS.map((src) => `<script src="${src}"></script>`).join("\n")}
 </body>
 </html>
 `;
@@ -287,13 +320,13 @@ export function authDoneResponse(req: Request): Response {
       "x-robots-tag": "noindex, nofollow",
       "referrer-policy": "no-referrer",
       "x-content-type-options": "nosniff",
-      // Honest only because the page loads nothing from anybody else: no font,
-      // no client framework, one photograph from this same site. The one script
+      // Honest only because the page loads nothing from anybody else: no client
+      // framework, and its font and drawings come from this same site. The one script
       // is allowed by its hash, so an injected one would not run even if rule 2
       // above were ever broken.
       "content-security-policy":
-        "default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; " +
-        `script-src 'sha256-${SCRIPT_HASH}'; ` +
+        "default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; " +
+        `script-src 'self' 'sha256-${SCRIPT_HASH}'; ` +
         "base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
     },
   });

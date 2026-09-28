@@ -1,0 +1,41 @@
+/* LouRig — the ink and the three colours. Everything Lou is drawn with.
+ * --lou-sw is set from JS (el.style.setProperty, CSP-safe): the drawing's own
+ * 4.6-unit line, but never thinner than 1.75 px on screen. */
+.lou-rig {
+  --lou-ink: #1b1b1b;
+  --lou-teal: #3d9a8e;
+  --lou-teal-light: #a9dcd2;
+  --lou-sw: 4.6px;
+  position: relative;
+  width: 100%;
+  line-height: 0;
+  pointer-events: none;
+  user-select: none;
+}
+.lou-rig__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.lou-i {
+  fill: none;
+  stroke: var(--lou-ink);
+  stroke-width: var(--lou-sw);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.lou-i--thin { stroke-width: calc(var(--lou-sw) * 0.83); }
+.lou-i--eye { stroke-width: calc(var(--lou-sw) * 0.92); }
+.lou-i--cable { stroke-width: calc(var(--lou-sw) * 0.9); }
+.lou-i--bold { stroke-width: calc(var(--lou-sw) * 1.3); }
+.lou-i--floor { stroke-width: calc(var(--lou-sw) * 0.78); opacity: 0.3; }
+.lou-k { fill: var(--lou-ink); }
+.lou-t { fill: var(--lou-teal); }
+.lou-tl { fill: var(--lou-teal-light); }
+.lou-collar {
+  fill: none;
+  stroke: var(--lou-teal);
+  stroke-width: 13px;
+  stroke-linecap: round;
+}

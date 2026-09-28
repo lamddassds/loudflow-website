@@ -1,0 +1,100 @@
+/* Die Stimme — the stage's own styles. The serif is the host page's
+ * 'EB Garamond' (skeleton.css declares it for signin.html; the harness
+ * declares it for itself), so this file carries no font path. */
+.lfs-root {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #f5f4f0;
+  contain: strict;
+}
+.lfs-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ---- the line the page is reading ---- */
+.lfs-line {
+  position: absolute;
+  left: var(--lfs-line-x, 48px);
+  bottom: var(--lfs-line-b, 120px);
+  width: var(--lfs-line-w, 360px);
+  height: 3.2em;
+  font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+  font-size: var(--lfs-fs, 24px);
+  line-height: 1.22;
+  letter-spacing: -0.005em;
+  color: #16150f;
+  pointer-events: none;
+  user-select: none;
+}
+.lfs-phrase {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  text-wrap: balance;
+  opacity: 0;
+  transform: translateY(7px);
+  transition: opacity 520ms cubic-bezier(.2, .8, .2, 1), transform 700ms cubic-bezier(.2, .8, .2, 1);
+}
+/* one line after the other: the old one leaves first, the new one follows */
+.lfs-phrase.is-shown { opacity: 1; transform: none; transition-delay: 260ms; }
+.lfs-phrase.is-gone {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 260ms ease-in, transform 420ms ease-in;
+}
+
+/* a word: waiting (ink-mid), being said (ink, amber marker drawn under it),
+ * said (cooled to teal, lifted, gone into the water) */
+.lfs-w {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  color: #55524a;
+  opacity: 0.78;
+  transition: color 700ms ease-out, opacity 1100ms ease-out, transform 1100ms cubic-bezier(.2, .8, .2, 1);
+}
+.lfs-w--em { font-style: italic; }
+.lfs-w::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: -0.1em;
+  right: -0.1em;
+  top: 0.26em;
+  bottom: 0.08em;
+  border-radius: 0.12em;
+  background: #ffa946;
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 240ms cubic-bezier(.2, .8, .2, 1), opacity 240ms ease-out;
+}
+.lfs-w.is-now { color: #16150f; opacity: 1; }
+.lfs-w.is-now::before { opacity: 0.62; transform: scaleX(1); }
+.lfs-w.is-said { color: #247872; opacity: 0.62; transform: translateY(-2px); }
+.lfs-w.is-said::before { opacity: 0; transform: scaleX(1); transition: opacity 1400ms ease-out; }
+
+/* ---- Lou ---- */
+.lfs-lou {
+  position: absolute;
+  left: var(--lfs-lou-x, 460px);
+  top: var(--lfs-lou-y, 640px);
+  width: var(--lfs-lou-w, 170px);
+  pointer-events: none;
+}
+.lfs-lou__svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+/* entrance: the ink soaks in (shader), the line and Lou rise after it */
+@keyframes lfs-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.lfs-line, .lfs-lou { animation: lfs-rise 700ms cubic-bezier(.2, .8, .2, 1) both; }
+
+/* reduced motion: one still, nothing moves */
+.lfs-still .lfs-line, .lfs-still .lfs-lou { animation: none; }
+.lfs-still .lfs-phrase, .lfs-still .lfs-w, .lfs-still .lfs-w::before { transition: none; }
