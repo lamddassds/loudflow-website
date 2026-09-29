@@ -95,7 +95,7 @@ export const PRIVACY: Doc = {
       h: "Your welcome-tour answers — only if you switch it on",
       p: [
         "The first page of the welcome tour has a switch: \"Help improve LoudFlow with my answers\". It is off until you turn it on, and you can turn it off again in the tour or in Settings.",
-        "If it is on, we save with your account: the choices you make in the tour (what you want read to you, why, roughly how much you read in a day, speed or best voice, whether you made your own voice or picked one), which pages of the tour you saw and for how long, which version of the tour you were shown, the app version and language, and — after your first day — how many texts were read and how fast speech was made on your computer. Never your texts, recordings, voices or name.",
+        "If it is on, we save with your account: the choices you make in the tour (what you want read to you, why you listen, speed or best voice, whether you made your own voice or picked one), which pages of the tour you saw and for how long, which version of the tour you were shown, the app version and language, and — after your first day — how many texts were read and how fast speech was made on your computer. Never your texts, recordings, voices or name — and never your answer to how reading feels to you: that one stays on your computer, because it can say something about your health.",
         "It is linked to your account, so it is not anonymous. Your account can read only its own row; we, the makers, can read all rows in our database's admin view. We use it to see which version of the tour works better and to make LoudFlow better — nothing else. It stays until you delete your account or ask us to delete it.",
       ],
     },
