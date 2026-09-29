@@ -32,7 +32,7 @@
 // ui/onboarding-v5/LEGAL.md, every requirement with its source). What changed:
 // every party that sees data is named (PostHog, Vercel, GitHub were missing),
 // transfers abroad and legal bases are stated, the welcome-tour answers are
-// OPT-IN, "Agree and continue" is the assent and both documents carry a
+// OPT-IN, signing in (the line under the button) is the assent, both documents carry a
 // version id the app records, the voice consent is per recording, liability
 // is limited only as far as consumer law allows, and the fonts come from this
 // site instead of Google's (a font request sends the visitor's IP to Google).
@@ -188,7 +188,7 @@ export const TERMS: Doc = {
     {
       h: "Agreeing",
       p: [
-        "By choosing \"Agree and continue\" in the app you accept these Terms and the Privacy page, and you confirm that you are at least 16. If we change them in a way that matters, the app asks you again; until you agree, the old version applies to you. If you do not agree, you can delete your account, and nothing else happens. We never treat silence as agreement.",
+        "Signing in to LoudFlow is how you agree: the line directly under the sign-in button says that by signing in you confirm you are at least 16 and accept these Terms and the Privacy page, with links to both. The app records which version you agreed to and when. If we change them in a way that matters, the app asks you to sign in and agree again; until you do, the old version applies to you. If you do not agree, you can delete your account, and nothing else happens. We never treat silence as agreement.",
       ],
     },
     {
