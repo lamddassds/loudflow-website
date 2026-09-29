@@ -95,8 +95,9 @@ export const PRIVACY: Doc = {
       h: "Your welcome-tour answers — only if you switch it on",
       p: [
         "The first page of the welcome tour has a switch: \"Help improve LoudFlow with my answers\". It is off until you turn it on, and you can turn it off again in the tour or in Settings.",
-        "If it is on, we save with your account: the choices you make in the tour (what you want read to you, why you listen, speed or best voice, whether you made your own voice or picked one), which pages of the tour you saw and for how long, which version of the tour you were shown, the app version and language, and — after your first day — how many texts were read and how fast speech was made on your computer. Never your texts, recordings, voices or name — and never your answer to how reading feels to you: that one stays on your computer, because it can say something about your health.",
-        "It is linked to your account, so it is not anonymous. Your account can read only its own row; we, the makers, can read all rows in our database's admin view. We use it to see which version of the tour works better and to make LoudFlow better — nothing else. It stays until you delete your account or ask us to delete it.",
+        "If it is on, we save with your account: the choices you make in the tour (what you want read to you, why you listen, speed or best voice, whether you made your own voice or picked one), which pages of the tour you saw and for how long, which version of the tour you were shown, the app version and language, and — after your first day — how many texts were read and how fast speech was made on your computer. Never your texts, recordings, voices or name.",
+        "How reading feels to you (easy, okay, tiring or very hard) is sent only if you ALSO turn on a second switch, right under that question, which is off until you turn it on. This answer can say something about your health, so we take it only with that separate, explicit yes, and without it the answer stays on your computer.",
+        "It is linked to your account, so it is not anonymous. Your account can read only its own row; we, the makers, can read all rows in our database's admin view. We use it for two things only: to see which version of the tour works better, and to understand who LoudFlow helps — for example how many people find reading hard — so that we build it for them. Never for advertising, never sold, never passed on. Turning the first switch off (in the tour or in Settings) deletes what was sent; turning off only the second one removes your reading answer. Otherwise it stays until you delete your account.",
       ],
     },
     {
@@ -136,7 +137,7 @@ export const PRIVACY: Doc = {
     {
       h: "Why the law lets us",
       p: [
-        "Your account, your computer records and the sign-in emails: to give you the service you signed up for. Website logs: our interest in a secure website. The encrypted copy for a second computer, your welcome-tour answers and error reports: your consent, which you can withdraw at any time with the same switch or by removing the computer. Nothing about you is decided by a computer alone.",
+        "Your account, your computer records and the sign-in emails: to give you the service you signed up for. Website logs: our interest in a secure website. The encrypted copy for a second computer, your welcome-tour answers and error reports: your consent, which you can withdraw at any time with the same switch or by removing the computer. Your answer on how reading feels: your explicit consent to that one answer (Art. 9(2)(a) GDPR, Art. 6(7) Swiss FADP), withdrawn with its own switch. Nothing about you is decided by a computer alone.",
       ],
     },
     {
