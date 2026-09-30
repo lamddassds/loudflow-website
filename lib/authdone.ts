@@ -112,11 +112,12 @@ function handoffUrl(url: URL): string {
  * photographs for the mascot and a stage built in code (the "login redo",
  * `ui/login-redo/VISION.md` in the app repo). This tab keeps the window's
  * shape: in the column, Lou in the pose of the moment (happy when it worked,
- * puzzled when it didn't); in the other half, Lou listening on the stage's
- * paper. The SVGs animate themselves with SMIL — no script — and come from
+ * puzzled when it didn't, listening when the visit carried nothing at all);
+ * in the other half, Lou listening on the stage's paper. The SVGs animate themselves with SMIL — no script — and come from
  * this same site, so `img-src 'self'` still covers everything. */
 const LOU_OK = "/img/lou-happy.svg";
 const LOU_BAD = "/img/lou-puzzled.svg";
+const LOU_CALM = "/img/lou-listening.svg";   // the empty visit: nothing went wrong
 
 /* THE LIVING HALF — 2026-09-28, the same one the app's window shows: the
  * "Die Stimme" stage (a voice marbling on paper, a line read aloud) with Lou as
@@ -172,30 +173,89 @@ function reason(url: URL): string {
   return desc || code;
 }
 
-function render(url: URL): string {
-  const failed = url.searchParams.has("error");
-  const cancelled = url.searchParams.get("error") === "access_denied";
-  const target = handoffUrl(url);
-  const why = reason(url);
+/* WHICH OF FOUR THINGS THIS VISIT IS.
+ *
+ * `empty` WAS MISSING UNTIL 2026-09-30, and its absence made the page lie. The
+ * bare address — pasted, bookmarked, reloaded after the script above has taken
+ * the code out of the bar — rendered the success state: "You're signed in",
+ * with a button that handed the app `loudflow://auth` and nothing else. Lauro
+ * pasted it himself and asked whether a stranger doing the same would land in
+ * his account. They would not (rule 4) — but the page told them they had.
+ *
+ * This page cannot know whether a sign-in happened; only the app can. So a
+ * visit without a code claims nothing, and it has no button: the app
+ * deliberately ignores a `loudflow://` link that answers no question it asked
+ * (`main/index.js`, "a forged link now changes nothing on screen"), so an
+ * "Open LoudFlow" here would be a button that does nothing whenever the app
+ * is already running.
+ *
+ * A code longer than `handoffUrl` forwards counts as no code: it would be
+ * dropped from the link, and the button would carry nothing. */
+type Visit = "ok" | "cancelled" | "failed" | "empty";
 
-  const ok = `
+function visitOf(url: URL): Visit {
+  if (url.searchParams.has("error")) {
+    return url.searchParams.get("error") === "access_denied" ? "cancelled" : "failed";
+  }
+  const code = url.searchParams.get("code");
+  return code && code.length <= 2048 ? "ok" : "empty";
+}
+
+/* THE WORDS, ONE TITLE AND AT MOST ONE SHORT LINE — tightened 2026-09-30 to
+ * the app's rule for people who do not like to read (`ui/UI_PLAYBOOK.md` §0:
+ * title ≤ 5 words, one sentence ≤ 6, never a paragraph). The old lines ran to
+ * eleven words and two sentences each; every reference that does this well
+ * (Twingate, Midday, Jitter on Mobbin) says one thing and stops. */
+function body(visit: Visit, target: string, why: string): string {
+  const open = (label: string) =>
+    `<a class="btn" id="open" href="${esc(target)}">${label}</a>`;
+  switch (visit) {
+    case "ok":
+      return `
   <h1>You're signed <em>in</em></h1>
-  <p>LoudFlow should open by itself. If it doesn't, use the button.</p>
-  <a class="btn" id="open" href="${esc(target)}">Open LoudFlow</a>
-  <p class="after">You can close this tab once the app is open.</p>`;
-
-  /* THE REFUSAL GETS A BUTTON TOO, and that is not symmetry for its own sake.
-   * The app is sitting on its sign-in screen waiting for an answer; the
-   * `loudflow://auth?error=…` URL IS the answer, and `signin.js` has a state
-   * built to draw it. Without this button the refusal stops here, in a browser
-   * tab, and the app waits out its fifteen seconds knowing nothing. */
-  const bad = `
-  <h1>${cancelled ? "Sign-in <em>cancelled</em>" : "Sign-in didn't <em>work</em>"}</h1>
-  <p>Nothing was changed and no account was created.${
-    cancelled ? "" : " Try again from LoudFlow."}</p>
-  ${why ? `<p class="why">${esc(why)}</p>` : ""}
-  <a class="btn" id="open" href="${esc(target)}">Back to LoudFlow</a>
+  <p>LoudFlow opens by itself.</p>
+  ${open("Open LoudFlow")}
+  <p class="after">Then close this tab.</p>`;
+    /* THE REFUSAL GETS A BUTTON TOO, and that is not symmetry for its own sake.
+     * The app is sitting on its sign-in screen waiting for an answer; the
+     * `loudflow://auth?error=…` URL IS the answer, and `signin.js` has a state
+     * built to draw it. Without this button the refusal stops here, in a
+     * browser tab, and the app waits out its fifteen seconds knowing nothing.
+     *
+     * A cancel shows no machine words: "The user denied the request
+     * (access_denied)" only repeats the headline in a harder voice. */
+    case "cancelled":
+      return `
+  <h1>Sign-in <em>cancelled</em></h1>
+  <p>Nothing was changed.</p>
+  ${open("Back to LoudFlow")}
   <p class="after">You can close this tab.</p>`;
+    case "failed":
+      return `
+  <h1>Sign-in didn't <em>work</em></h1>
+  <p>Try again from LoudFlow.</p>
+  ${why ? `<p class="why">${esc(why)}</p>` : ""}
+  ${open("Back to LoudFlow")}
+  <p class="after">You can close this tab.</p>`;
+    case "empty":
+      return `
+  <h1>Nothing to do <em>here</em></h1>
+  <p>Sign-in starts in the LoudFlow app.</p>
+  <p class="after">You can close this tab.</p>`;
+  }
+}
+
+const POSE: Record<Visit, [string, string]> = {
+  ok: ["happy", LOU_OK],
+  cancelled: ["puzzled", LOU_BAD],
+  failed: ["puzzled", LOU_BAD],
+  empty: ["listening", LOU_CALM],
+};
+
+function render(url: URL): string {
+  const visit = visitOf(url);
+  const [pose, still] = POSE[visit];
+  const content = body(visit, handoffUrl(url), reason(url));
 
   return `<!doctype html>
 <html lang="en">
@@ -257,10 +317,13 @@ ${STAGE_CSS.map((href) => `<link rel="stylesheet" href="${href}" />`).join("\n")
     text-wrap: balance;
   }
   h1 em { font-style: italic; color: ${TEAL}; }
-  /* 14 / 20 on --sk-ink-mid, the same .sg-lead. text-wrap: balance for the
-     reason the app gives: a short tail must not sit alone on the last row. */
+  /* 18 / 26 on --sk-ink-mid since 2026-09-30 (was 14 / 20): the one line on
+     this page somebody has to read, at the size the app's rule gives such a
+     line (ui/UI_PLAYBOOK.md §0.3, "≥ 18 px") and the size its newest sign-in
+     step reads at (signin.css .sg-agree__w, 18 / 26). text-wrap: balance for
+     the reason the app gives: a short tail must not sit alone on the last row. */
   /* Scoped to the column: the stage's own reading line is a <p> too. */
-  main p { margin: 0 0 28px; font-size: 14px; line-height: 20px; color: ${INK_MID}; text-wrap: balance; }
+  main p { margin: 0 0 28px; font-size: 18px; line-height: 26px; color: ${INK_MID}; text-wrap: balance; }
 
   /* The machine's own words — a line to copy, not a line to be alarmed by.
      Monospace so a code reads as a code, on a tint of the ground so it sits
@@ -287,21 +350,27 @@ ${STAGE_CSS.map((href) => `<link rel="stylesheet" href="${href}" />`).join("\n")
   .btn:active { transform: scale(0.97); }
   .btn:focus-visible { outline: 2px solid ${INK}; outline-offset: 2px; }
 
-  /* The quiet line after the action. Half a step down from the lead, because
-     it is the one sentence nobody has to read. */
-  main .after { margin: 20px 0 0; font-size: 13px; line-height: 19px; opacity: 0.75; }
+  /* The quiet line after the action. A step down from the lead, because it
+     is the one sentence nobody has to read — but in the lead's own ink-mid,
+     not faded: "Tinte statt Hellgrau" (UI_PLAYBOOK.md §0.3). */
+  main .after { margin: 20px 0 0; font-size: 15px; line-height: 22px; }
+  /* Without a button the quiet line follows the lead directly. */
+  main p + .after { margin-top: -8px; }
 
   @media (max-width: 420px) {
     h1 { font-size: 38px; line-height: 42px; }
     .brand { margin-bottom: 26px; }
+    /* A finger, not a pointer: 44 px is the smallest target a phone should
+       offer (measured 37.6 px here before, 2026-09-30). */
+    .btn { min-height: 44px; padding: 0 20px; }
   }
 </style>
 </head>
 <body>
 <div class="col"><main>
-${LOCKUP}${failed ? bad : ok}
+${LOCKUP}${content}
 </main></div>
-<div class="art" id="stage" aria-hidden="true" data-pose="${failed ? "puzzled" : "happy"}"><img src="${failed ? LOU_BAD : LOU_OK}" alt="" /></div>
+<div class="art" id="stage" aria-hidden="true" data-pose="${pose}"><img src="${still}" alt="" /></div>
 <script>${SCRIPT}</script>
 ${STAGE_JS.map((src) => `<script src="${src}"></script>`).join("\n")}
 </body>

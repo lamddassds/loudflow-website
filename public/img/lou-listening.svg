@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="400 300 520 440">
+<defs><filter id="w" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="4.5"/></filter><filter id="w2"><feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="8"/></filter></defs>
+<g filter="url(#w2)">
+<path d="M690,520 C716,506 744,526 740,556 C736,584 706,588 692,570 C680,556 678,532 690,520 Z" fill="#3d9a8e"/>
+<path d="M722,640 C744,630 764,650 758,672 C752,690 726,690 718,676 C710,662 712,648 722,640 Z" fill="#3d9a8e"/>
+<path d="M596,478 C610,470 628,462 644,452" fill="none" stroke="#3d9a8e" stroke-width="13" stroke-linecap="round"/>
+<g transform="rotate(-9 600 440)">
+<path d="M556,398 C572,388 592,396 592,414 C592,432 570,436 558,428 C548,420 548,406 556,398 Z" fill="#3d9a8e"/>
+<g transform="translate(7,-4) rotate(-22 614 392)"><path d="M612,388 C640,378 662,398 664,430 C668,472 656,508 638,516 C622,520 614,500 614,478 C612,450 606,420 612,388 Z" fill="#3d9a8e"></path></g>
+</g>
+</g>
+<g filter="url(#w)">
+<g><path d="M766,684 C808,676 832,640 826,604 C824,590 832,580 844,580" fill="none" stroke="#1b1b1b" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<path d="M592,476 C570,516 566,560 580,602 L578,700" fill="none" stroke="#1b1b1b" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M608,604 L606,700" fill="none" stroke="#1b1b1b" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M568,706 C568,692 612,692 614,706 Z" fill="none" stroke="#1b1b1b" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M640,448 C690,474 742,530 762,600 C778,650 774,690 752,704 L700,706" fill="none" stroke="#1b1b1b" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M744,612 C704,610 682,650 692,690" fill="none" stroke="#1b1b1b" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M618,706 C622,690 686,690 700,706 Z" fill="none" stroke="#1b1b1b" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+<g transform="rotate(-9 600 440)">
+<path d="M640,420 C640,385 612,368 586,374 C566,379 556,394 549,407 L508,413 C490,415 481,430 487,443 C493,456 511,460 531,458 C551,460 561,470 581,474 C615,478 640,455 640,420 Z" fill="none" stroke="#1b1b1b" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="490" cy="423" rx="10" ry="8" fill="#1b1b1b"/>
+<circle cx="573" cy="410" r="5.2" fill="#1b1b1b"><animate attributeName="ry" values="5.2;5.2;0.8;5.2" keyTimes="0;0.92;0.96;1" dur="4.2s" repeatCount="indefinite"/></circle>
+<path d="M560,392 C568,388 578,388 585,392" fill="none" stroke="#1b1b1b" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M503,450 C514,457 527,458 536,455" fill="none" stroke="#1b1b1b" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+<g transform="rotate(-22 614 392)"><g><path d="M612,388 C640,378 662,398 664,430 C668,472 656,508 638,516 C622,520 614,500 614,478 C612,450 606,420 612,388 Z" fill="none" stroke="#1b1b1b" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+<animateTransform attributeName="transform" type="rotate" values="0 614 392;-9 614 392;-9 614 392;0 614 392;0 614 392" keyTimes="0;0.12;0.4;0.55;1" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1" dur="3.2s" begin="0s" repeatCount="indefinite"/>
+</g></g>
+</g>
+<path d="M470,716 C560,712 700,714 860,712" fill="none" stroke="#1b1b1b" stroke-width="3.6" stroke-linecap="round" opacity="0.3"/>
+</g></svg>
