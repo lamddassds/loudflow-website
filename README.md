@@ -64,6 +64,20 @@ Auto-deployed to Vercel on every push to `main`. The **Download** buttons resolv
 https://github.com/lamddassds/Loudflow-updat/releases/latest
 ```
 
+## `/auth/done` — the page the browser lands on after Google
+
+`lib/authdone.ts`, four states: signed in (`?code=`), cancelled
+(`?error=access_denied`), failed (`?error=…`), and **empty** — the bare address
+claims nothing and has no button (since 2026-09-30). Before you push a change to
+it:
+
+```
+node scripts/check-authdone.mjs
+```
+
+67 assertions over 9 visits, no build and no dependencies; it must print
+`CHECK PASS`.
+
 ---
 
 ## Related
