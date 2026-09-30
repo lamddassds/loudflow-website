@@ -78,6 +78,15 @@ node scripts/check-authdone.mjs
 67 assertions over 9 visits, no build and no dependencies; it must print
 `CHECK PASS`.
 
+### `/api/google-token` — Google sign-in on our own domain (2026-09-30)
+
+Swaps a Google sign-in code (plus its PKCE verifier, sent by the app directly)
+for Google's ID token, so Google's screen says `loudflow.xyz` instead of the
+Supabase project host. Needs one secret on Vercel: `GOOGLE_CLIENT_SECRET`
+(from the Google OAuth client). Without it the route answers `503
+not_configured`. Check: `node scripts/check-google-token.mjs`.
+
+
 ---
 
 ## Related
