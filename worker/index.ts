@@ -28,7 +28,9 @@ export function route(req: Request): Response | Promise<Response> {
   // workers.dev and localhost stay as they are, so the deploy can be checked
   // before any domain points here.
   const ours = host === CANONICAL || /(^|\.)loudflow\.(ai|si|xyz)$/.test(host);
-  if (ours && host !== CANONICAL) {
+  // http:// on any of our hosts goes to https://loudflow.ai as well, so the
+  // sign-in page and its code never travel unencrypted.
+  if (ours && (host !== CANONICAL || url.protocol === "http:")) {
     return new Response(null, {
       status: 301,
       headers: {
