@@ -20,10 +20,15 @@
     { "pattern": "loudflow.ai", "custom_domain": true },
     { "pattern": "www.loudflow.ai", "custom_domain": true },
     { "pattern": "loudflow.si", "custom_domain": true },
-    { "pattern": "www.loudflow.si", "custom_domain": true },
-    // loudflow.xyz also carries the Resend sign-in mail records (send CNAME,
-    // resend._domainkey, _dmarc) — those stay in the zone, untouched.
-    { "pattern": "loudflow.xyz", "custom_domain": true },
-    { "pattern": "www.loudflow.xyz", "custom_domain": true }
+    { "pattern": "www.loudflow.si", "custom_domain": true }
+    // loudflow.xyz + www.loudflow.xyz come back here once loudflow.ai is ACTIVE
+    // on Cloudflare — xyz 301s to .ai, and installs up to 0.3.79 sign in through
+    // loudflow.xyz/auth/done, so .ai has to answer first. Measured 2026-10-02:
+    // the .xyz registry switched at 13:30:51; until the zone turned active
+    // (13:33:51, after "Check nameservers now") Cloudflare answered the custom
+    // domain with the bare placeholder AAAA 100::, i.e. unreachable. Until .ai
+    // is active the zone points loudflow.xyz at Vercel (A 216.198.79.1 and www
+    // CNAME cname.vercel-dns.com, both DNS only). The zone also carries the
+    // Resend sign-in mail records (send CNAME, resend._domainkey, _dmarc).
   ]
 }
