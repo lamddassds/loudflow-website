@@ -12,5 +12,18 @@
   "compatibility_flags": ["nodejs_compat"],
   "assets": { "directory": "./public" },
   "observability": { "enabled": true },
-  "workers_dev": true
+  "workers_dev": true,
+  // Every host lands on this Worker; worker/index.ts answers loudflow.ai and
+  // 301s the rest to it. Custom domains create their own DNS record and
+  // certificate, so a hostname here must have NO other record in its zone.
+  "routes": [
+    { "pattern": "loudflow.ai", "custom_domain": true },
+    { "pattern": "www.loudflow.ai", "custom_domain": true },
+    { "pattern": "loudflow.si", "custom_domain": true },
+    { "pattern": "www.loudflow.si", "custom_domain": true },
+    // loudflow.xyz also carries the Resend sign-in mail records (send CNAME,
+    // resend._domainkey, _dmarc) — those stay in the zone, untouched.
+    { "pattern": "loudflow.xyz", "custom_domain": true },
+    { "pattern": "www.loudflow.xyz", "custom_domain": true }
+  ]
 }

@@ -3,7 +3,7 @@
 > The easiest way to read any text aloud.
 
 > [!NOTE]
-> **The site is under construction.** [loudflow.xyz](https://loudflow.xyz) is
+> **The site is under construction.** [loudflow.ai](https://loudflow.ai) is
 > parked behind a maintenance notice while a much newer version of LoudFlow
 > takes its place. The previous site is kept on the
 > [`site-v1`](https://github.com/lamddassds/loudflow-website/tree/site-v1) branch.
@@ -11,7 +11,8 @@
 LoudFlow is a native Windows app that turns any text into natural-sounding speech.
 Select text anywhere — a browser, a PDF, your IDE, a chat — press `Ctrl+Space`, and listen.
 
-This repository contains the source for the marketing site at **[loudflow.xyz](https://loudflow.xyz)**.
+This repository contains the source for the marketing site at **[loudflow.ai](https://loudflow.ai)**.
+loudflow.xyz, loudflow.si and every `www.` answer with a 301 to the same path on loudflow.ai.
 
 ---
 
@@ -29,7 +30,7 @@ This repository contains the source for the marketing site at **[loudflow.xyz](h
 One line in PowerShell:
 
 ```powershell
-irm https://loudflow.xyz/install.ps1 | iex
+irm https://loudflow.ai/install.ps1 | iex
 ```
 
 Or grab the `.exe` installer from the [latest release](https://github.com/lamddassds/Loudflow-updat/releases/latest).
@@ -38,14 +39,16 @@ Or grab the `.exe` installer from the [latest release](https://github.com/lamdda
 
 ## About this repo
 
-This is just the marketing site — a small Next.js app deployed to Vercel.
+This is just the marketing site. Since 2026-10-02 it runs as a **Cloudflare Worker**
+(`worker/index.ts`, `wrangler.jsonc`); the Next.js app under `app/` is the
+former Vercel deployment and the Worker reuses its `lib/` and route code unchanged.
 
 ### Stack
 
 - [Next.js 15](https://nextjs.org) (App Router)
 - [Tailwind CSS](https://tailwindcss.com)
 - [Framer Motion](https://www.framer.com/motion/)
-- Deployed on [Vercel](https://vercel.com)
+- Deployed on [Cloudflare Workers](https://workers.cloudflare.com) (was Vercel until 2026-10-02)
 
 ### Local development
 
@@ -58,7 +61,9 @@ Opens at [http://localhost:3000](http://localhost:3000).
 
 ### Deployment
 
-Auto-deployed to Vercel on every push to `main`. The **Download** buttons resolve the latest Windows installer from the public release feed:
+**Not automatic any more:** `npm run cf:deploy` (= `wrangler deploy`) publishes
+the Worker and attaches all six hostnames as custom domains. A push to `main`
+only saves the code. The **Download** buttons resolve the latest Windows installer from the public release feed:
 
 ```
 https://github.com/lamddassds/Loudflow-updat/releases/latest
@@ -81,9 +86,9 @@ node scripts/check-authdone.mjs
 ### `/api/google-token` — Google sign-in on our own domain (2026-09-30)
 
 Swaps a Google sign-in code (plus its PKCE verifier, sent by the app directly)
-for Google's ID token, so Google's screen says `loudflow.xyz` instead of the
-Supabase project host. Needs one secret on Vercel: `GOOGLE_CLIENT_SECRET`
-(from the Google OAuth client). Without it the route answers `503
+for Google's ID token, so Google's screen says `loudflow.ai` instead of the
+Supabase project host. Needs one Worker secret: `npx wrangler secret put
+GOOGLE_CLIENT_SECRET` (from the Google OAuth client). Without it the route answers `503
 not_configured`. Check: `node scripts/check-google-token.mjs`.
 
 
@@ -92,7 +97,7 @@ not_configured`. Check: `node scripts/check-google-token.mjs`.
 ## Related
 
 - [**Loudflow-updat**](https://github.com/lamddassds/Loudflow-updat) — release feed & Windows installers (auto-update source)
-- [**loudflow.xyz**](https://loudflow.xyz) — live site
+- [**loudflow.ai**](https://loudflow.ai) — live site
 
 ## License
 
