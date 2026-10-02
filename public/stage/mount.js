@@ -1,4 +1,4 @@
-/* Mounts the sign-in stage on loudflow.xyz/auth/done — the same living half
+/* Mounts the sign-in stage on loudflow.ai/auth/done — the same living half
  * the app's sign-in window shows (app repo: app/src/hub/stage/, lou/). The
  * server writes Lou's pose into data-pose; without script the drawn Lou in
  * the element stays, so the page is whole either way. */

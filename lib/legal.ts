@@ -10,7 +10,7 @@
 // place to invent a second look for the brand, and the redesign that IS coming
 // will replace both pages at once.
 //
-// THEY RETURN 200, NOT 503. The rest of loudflow.xyz is parked behind a real
+// THEY RETURN 200, NOT 503. The rest of loudflow.ai is parked behind a real
 // "temporarily unavailable"; these two have to answer normally or Google's
 // checker, and anyone following the link from the sign-in screen, sees the
 // notice instead of the document.

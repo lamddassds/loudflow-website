@@ -1,0 +1,16 @@
+// Cloudflare Worker for loudflow.ai — replaces the Vercel project (2026-10-02).
+// Deploy: `npm run cf:deploy`. The code is worker/index.ts; it reuses lib/ and
+// app/api/google-token/route.ts unchanged.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "loudflow-website",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-09-01",
+  // lib/authdone.ts hashes its script with node's crypto, and the google-token
+  // route reads process.env.GOOGLE_CLIENT_SECRET — both need this flag
+  // (process.env is filled from the Worker's secrets since 2025-04-01).
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": { "directory": "./public" },
+  "observability": { "enabled": true },
+  "workers_dev": true
+}

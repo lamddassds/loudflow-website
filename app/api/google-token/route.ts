@@ -4,11 +4,12 @@
 // said "Weiter zu rxycyzbdbgurwymkwdgx.supabase.co". Google names the domain of
 // the redirect URI until a brand is verified, and a brand cannot be verified on
 // a domain you do not own. So the LoudFlow app now goes to Google itself and
-// Google returns to https://loudflow.xyz/auth/done — our page, our domain.
+// Google returns to https://loudflow.ai/auth/done — our page, our domain
+// (loudflow.xyz until 2026-10-02).
 //
 // THE ROUND TRIP (the app side is `app/src/main/auth.js`, "GOOGLE DIRECTLY"):
 //   1. app → Google with PKCE (S256), a hashed nonce and a state
-//   2. Google → loudflow.xyz/auth/done?code=… → loudflow://auth?code=…
+//   2. Google → loudflow.ai/auth/done?code=… → loudflow://auth?code=…
 //   3. app → THIS function: { code, code_verifier }  ← the verifier comes from
 //      the app over HTTPS, never through the browser
 //   4. this function → Google's token endpoint with the client secret
@@ -21,7 +22,8 @@
 //   — for their own ID token, which Supabase would give them anyway.
 // * It stores nothing and logs no code, verifier or token — only a status word.
 // * It answers a few fixed words, never Google's own text about a code.
-// * Until GOOGLE_CLIENT_SECRET is set on Vercel it answers 503
+// * Until GOOGLE_CLIENT_SECRET is set (a Cloudflare Worker secret since
+//   2026-10-02: `npx wrangler secret put GOOGLE_CLIENT_SECRET`) it answers 503
 //   `not_configured`, and the app says "the sign-in service had a problem" —
 //   the app only comes here once supabase.json names this URL, which happens
 //   after the round trip has been measured.
@@ -32,7 +34,7 @@ export const dynamic = "force-dynamic";
 // redirect URI must match, to the byte, the one the app sent and the one
 // registered at Google.
 const CLIENT_ID = "656202119404-eq7eajdb9n0u1li7g44oss3c3cgbl7hg.apps.googleusercontent.com";
-const REDIRECT_URI = "https://loudflow.xyz/auth/done";
+const REDIRECT_URI = "https://loudflow.ai/auth/done";
 const GOOGLE_TOKEN = "https://oauth2.googleapis.com/token";
 
 const HEADERS = {

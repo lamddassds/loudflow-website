@@ -19,7 +19,7 @@ const src = process.argv[2]
   ? pathToFileURL(process.argv[2]).href
   : new URL('../lib/authdone.ts', import.meta.url).href
 const mod = await import(src)
-const B = 'https://loudflow.xyz/auth/done'
+const B = 'https://loudflow.ai/auth/done'
 const get = async (q) => {
   const r = mod.authDoneResponse(new Request(B + q))
   return { r, h: await r.text() }
