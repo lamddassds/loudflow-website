@@ -33,7 +33,10 @@ export const dynamic = "force-dynamic";
 // Public values: the client id is in every Google sign-in URL, and the
 // redirect URI must match, to the byte, the one the app sent and the one
 // registered at Google.
-const CLIENT_ID = "656202119404-eq7eajdb9n0u1li7g44oss3c3cgbl7hg.apps.googleusercontent.com";
+// Since 2026-10-02 the client of Lauro's own Google Cloud project `loudflow`
+// (724736947288). The old client 656202119404-… lives in a project his account
+// cannot open; Supabase's own Google provider still uses that one, untouched.
+const CLIENT_ID = "724736947288-h6sin37durrr4pkababqk5q66u5n01cn.apps.googleusercontent.com";
 const REDIRECT_URI = "https://loudflow.ai/auth/done";
 const GOOGLE_TOKEN = "https://oauth2.googleapis.com/token";
 
