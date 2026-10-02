@@ -20,15 +20,19 @@
     { "pattern": "loudflow.ai", "custom_domain": true },
     { "pattern": "www.loudflow.ai", "custom_domain": true },
     { "pattern": "loudflow.si", "custom_domain": true },
-    { "pattern": "www.loudflow.si", "custom_domain": true }
-    // loudflow.xyz + www.loudflow.xyz come back here once loudflow.ai is ACTIVE
-    // on Cloudflare — xyz 301s to .ai, and installs up to 0.3.79 sign in through
-    // loudflow.xyz/auth/done, so .ai has to answer first. Measured 2026-10-02:
-    // the .xyz registry switched at 13:30:51; until the zone turned active
-    // (13:33:51, after "Check nameservers now") Cloudflare answered the custom
-    // domain with the bare placeholder AAAA 100::, i.e. unreachable. Until .ai
-    // is active the zone points loudflow.xyz at Vercel (A 216.198.79.1 and www
-    // CNAME cname.vercel-dns.com, both DNS only). The zone also carries the
-    // Resend sign-in mail records (send CNAME, resend._domainkey, _dmarc).
+    { "pattern": "www.loudflow.si", "custom_domain": true },
+    // loudflow.xyz is a ROUTE, not a custom domain, on purpose: its two DNS
+    // records (A 216.198.79.1, www CNAME cname.vercel-dns.com) stay and are
+    // switched to "Proxied", so the moment they flip the Worker answers and
+    // there is no instant without a record. A custom domain would have needed
+    // the records deleted first, and a resolver asking in that gap caches "no
+    // such name" for the SOA minimum. History, measured 2026-10-02: the .xyz
+    // registry switched 13:30:51, zone active 13:33:51, and in between the
+    // custom domain answered with the bare placeholder AAAA 100:: — loudflow.xyz
+    // was unreachable for a few minutes. .ai went active 15:40:08, HTTPS 15:42.
+    // The zone also carries the Resend sign-in mail records (send CNAME,
+    // resend._domainkey, _dmarc) — untouched.
+    { "pattern": "loudflow.xyz/*", "zone_name": "loudflow.xyz" },
+    { "pattern": "www.loudflow.xyz/*", "zone_name": "loudflow.xyz" }
   ]
 }
