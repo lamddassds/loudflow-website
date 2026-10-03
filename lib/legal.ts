@@ -37,6 +37,31 @@
 // is limited only as far as consumer law allows, and the fonts come from this
 // site instead of Google's (a font request sends the visitor's IP to Google).
 // Still NOT reviewed by a lawyer.
+//
+// 2026-09-30 — AGREEING IS A BUTTON NOW, AND THE TERMS EXIST IN GERMAN. Lauro
+// asked for AGB "im Stil von anderen Apps" that say plainly what is agreed to,
+// including the data from the welcome tour, and for a clean screen where it is
+// clicked. So: the app shows a screen right after the first sign-in (the
+// summary in pictures, links to both pages, "Agree and continue"), and then a
+// second one, "Help us improve?", with Yes and No as two equal buttons. The
+// Terms gained a short summary at the top, "What you may not do", "Your data,
+// and how we make LoudFlow better" and "Ideas you send us"; TERMS_DE is the
+// same document in German at /agb, under the same version. The welcome-tour
+// answers stay a SEPARATE yes (never bundled into agreeing to the Terms —
+// GDPR art. 7(2) and 7(4), EDPB guidelines 05/2020 on consent, Swiss FADP
+// art. 7(3) privacy by default). LoudFlowBKE ui/onboarding-v5/LEGAL.md, "Nachtrag 30.09.".
+//
+// SECOND PASS, SAME DAY — the voice rule is ticked ONCE on that screen and
+// each clone only reminds under its button (nothing forces a tick per clone);
+// and the Terms were read the way a court would read them (research with
+// sources in LEGAL.md, "Nachtrag 30.09., zweiter Durchgang"): no fixed CHF 100
+// cap (German § 307 BGB, "Kardinalpflichten"), every change needs consent
+// except typo-level corrections, the Privacy page is information and not
+// something to accept, updates only for a stated reason, reasons for a
+// suspension, a fault-based indemnity, a narrow licence for sync, a place to
+// report a voice copied without consent, children's voices only with the
+// parents, no claim of copyright in AI audio, and "save or print" before
+// agreeing (§ 312i BGB). Still NOT reviewed by a lawyer.
 
 const INK = "#16150f";
 const MUTED = "#71716e";
@@ -44,6 +69,7 @@ const LINE = "#e7e5dd";
 
 export type Doc = {
   slug: string;
+  lang: "en" | "de";
   title: string;
   version: string;
   updated: string;
@@ -59,9 +85,10 @@ const CONTACT = "loudflow.app@gmail.com";
 // the app then asks everybody again. The two must move together.
 export const PRIVACY: Doc = {
   slug: "privacy",
+  lang: "en",
   title: "Privacy",
-  version: "2026-09-29.1",
-  updated: "29 September 2026",
+  version: "2026-09-30.1",
+  updated: "30 September 2026",
   lead:
     "LoudFlow reads text aloud on your own computer. You sign in with an account, " +
     "and we keep as little as a working account allows. This page says exactly what that is.",
@@ -71,7 +98,7 @@ export const PRIVACY: Doc = {
       p: [
         "The text you have read aloud, the audio LoudFlow produces and the voice models it uses stay on your computer. There is no advertising, no tracking across apps or websites, and we do not sell, rent or share your data.",
         "We know your email address and keep a short record of each computer you use. As long as you use LoudFlow on one computer, your voices and texts never leave it.",
-        "Two things are sent only if you switch them on: your answers from the welcome tour, and error reports. Both switches are off until you turn them on.",
+        "Two things are sent only if you say yes: your answers from the welcome tour — we ask you once, right after you sign in, with Yes and No equally easy — and error reports, a switch in Settings. Saying no changes nothing about what the app can do.",
         "Only when you approve a second computer of your own — and LoudFlow asks you before anything is uploaded — do your saved voices and texts travel between your computers, end-to-end encrypted. The key exists only on your computers; we cannot read what we store.",
         "Deleting your account deletes all of it, at once and for good.",
       ],
@@ -87,17 +114,17 @@ export const PRIVACY: Doc = {
     {
       h: "What we hold when you sign in",
       p: [
-        "Your email address, an account identifier, the times you signed in, and which version of these Terms and this Privacy page you agreed to and when. That is what an account is. We do not email you marketing.",
+        "Your email address, an account identifier, the times you signed in, which version of the Terms you agreed to and which version of this Privacy page was shown to you, and when (you agree with \"Agree and continue\" on the screen that follows your first sign-in, after ticking the voice rule), and your answer to \"Help us improve?\" with its time. That is what an account is. We do not email you marketing.",
         "For each computer you use LoudFlow on, a short record: the computer's name as Windows reports it, its operating system and app version, a public key, and when it was last seen. It holds no content. We use it for one purpose — to know which computers are yours — and for nothing else.",
       ],
     },
     {
-      h: "Your welcome-tour answers — only if you switch it on",
+      h: "Your welcome-tour answers — only if you say yes",
       p: [
-        "The first page of the welcome tour has a switch: \"Help improve LoudFlow with my answers\". It is off until you turn it on, and you can turn it off again in the tour or in Settings.",
-        "If it is on, we save with your account: the choices you make in the tour (what you want read to you, why you listen, speed or best voice, whether you made your own voice or picked one), which pages of the tour you saw and for how long, which version of the tour you were shown, the app version and language, and — after your first day — how many texts were read and how fast speech was made on your computer. Never your texts, recordings, voices or name.",
-        "How reading feels to you (easy, okay, tiring or very hard) is sent only if you ALSO turn on a second switch, right under that question, which is off until you turn it on. This answer can say something about your health, so we take it only with that separate, explicit yes, and without it the answer stays on your computer.",
-        "It is linked to your account, so it is not anonymous. Your account can read only its own row; we, the makers, can read all rows in our database's admin view. We use it for two things only: to see which version of the tour works better, and to understand who LoudFlow helps — for example how many people find reading hard — so that we build it for them. Never for advertising, never sold, never passed on. Turning the first switch off (in the tour or in Settings) deletes what was sent; turning off only the second one removes your reading answer. Otherwise it stays until you delete your account.",
+        "Right after your first sign-in, LoudFlow asks \"Help us improve?\" and shows what would be sent. Yes and No are two buttons of the same size, and nothing is sent until you choose Yes. You can change your answer at any time on the first page of the welcome tour or in Settings › Data & privacy.",
+        "If you say Yes, we save with your account: the choices you make in the tour (what you want read to you, why you listen, speed or best voice, whether you made your own voice or picked one), which pages of the tour you saw and for how long, which version of the tour you were shown, the app version and language, and — after your first day — how many texts were read and how fast speech was made on your computer. Never your texts, recordings, voices or name.",
+        "How reading feels to you (easy, okay, tiring or very hard) is sent only if you ALSO turn on a second switch, right under that question, which is off until you turn it on — a Yes to the first question does not include it. This answer can say something about your health, so we take it only with that separate, explicit yes, and without it the answer stays on your computer.",
+        "It is linked to your account, so it is not anonymous. Your account can read only its own row; we, the makers, can read all rows in our database's admin view. We use it for two things only: to see which version of the tour works better, and to understand who LoudFlow helps — for example how many people find reading hard — so that we build it for them. Never for advertising, never sold, never passed on. Turning the first switch off (in the tour or in Settings) deletes what was sent; turning off only the second one removes your reading answer. Otherwise it stays until you delete your account. Totals worked out from many people's answers together — for example how many chose the fast voice — no longer point to anybody and are kept after you switch sharing off.",
       ],
     },
     {
@@ -171,7 +198,7 @@ export const PRIVACY: Doc = {
     {
       h: "Changes",
       p: [
-        "If this page changes, its version and date at the top change with it. If the change matters, the app asks you to agree again before it applies to you.",
+        "If this page changes, its version and date at the top change with it. If the change matters, the app shows it to you again before it applies to you. You do not have to accept this page; it informs you.",
       ],
     },
   ],
@@ -179,24 +206,70 @@ export const PRIVACY: Doc = {
 
 export const TERMS: Doc = {
   slug: "terms",
+  lang: "en",
   title: "Terms",
-  version: "2026-09-29.1",
-  updated: "29 September 2026",
+  version: "2026-09-30.1",
+  updated: "30 September 2026",
   lead:
-    "The rules for using LoudFlow. Short, because the app does little that " +
-    "needs rules — except one thing about voices, and that one comes first.",
+    "The rules for using LoudFlow, in short sentences. The most important " +
+    "points come first; the details follow. Auf Deutsch: loudflow.xyz/agb.",
   sections: [
+    {
+      h: "In short",
+      p: [
+        "LoudFlow reads text aloud, on your own computer.",
+        "You must be at least 16.",
+        "Only make a voice from your own recording, or from somebody who clearly agreed.",
+        "Your texts and voices are yours. No advertising, and we sell nothing about you.",
+        "Right after you sign in, we ask you once whether you share your answers from the welcome tour with us. Yes helps us make LoudFlow better. No is just as fine, and the app works the same.",
+        "You are responsible for the voices you make and for what you share.",
+        "LoudFlow is free and not free of errors. For slight mistakes our liability is limited (see \"Liability\").",
+        "You can delete your account in the app at any time.",
+      ],
+    },
     {
       h: "Agreeing",
       p: [
-        "Signing in to LoudFlow is how you agree: the line directly under the sign-in button says that by signing in you confirm you are at least 16 and accept these Terms and the Privacy page, with links to both. The app records which version you agreed to and when. If we change them in a way that matters, the app asks you to sign in and agree again; until you do, the old version applies to you. If you do not agree, you can delete your account, and nothing else happens. We never treat silence as agreement.",
+        "The first time you sign in, LoudFlow shows you what these Terms say, with links to them and to the Privacy page. There you tick, on its own, that you only clone your own voice or one you have permission for. By then choosing \"Agree and continue\" you accept these Terms and confirm that you are at least 16. You do not have to accept the Privacy page — it tells you what happens to your data. LoudFlow records which version you agreed to, that you ticked the voice rule, and when.",
+        "You can read, save (Ctrl+S) or print (Ctrl+P) these Terms here at any time — also before you agree.",
+        "If you do not agree, sign out or delete your account, and nothing else happens. We never treat silence as agreement.",
+      ],
+    },
+    {
+      h: "What LoudFlow does",
+      p: [
+        "LoudFlow turns text into speech with AI voices that run on your computer. You can use the voices it ships with or make one from a short recording or an audio file. Signing in needs an account and the internet; the reading itself happens offline.",
+      ],
+    },
+    {
+      h: "Your account",
+      p: [
+        "One account per person, and it is yours to look after. Tell us at " +
+          CONTACT +
+          " if you think somebody else is using it.",
+        "Each account has its own voices, texts and settings; on a shared computer another account starts empty. Approve only computers that belong to you.",
       ],
     },
     {
       h: "Voices — the rule that matters",
       p: [
-        "Each time you make a voice from a recording, you confirm that it is your own voice, or that the speaker clearly agreed to a synthetic copy and to how you will use it. You are responsible for what you make and what you share.",
+        "You may only make a voice from a recording of your own voice, or of a person who clearly agreed to a synthetic copy and to how you will use it — for a child's voice, the parents must agree. This also applies to files you upload. You confirm it once, with its own tick when you agree to these Terms, and it covers all your voices; each time you press the button that makes a voice, a line under it reminds you. You are responsible for what you make and what you share.",
         "Do not use LoudFlow to imitate a real person in order to mislead, defraud, harass or defame anybody, to make somebody appear to say something they did not say, to fake evidence or to get past voice checks, or for anything else unlawful. An account used that way is suspended, and where the law requires it we co-operate with the authorities.",
+        "Did somebody copy your voice without your yes? Write to " +
+          CONTACT +
+          ". If it is true, we suspend the account and delete whatever of it we store.",
+      ],
+    },
+    {
+      h: "What you may not do",
+      p: [
+        "Do not use LoudFlow to break the law or somebody else's rights; to publish audio of texts you have no right to publish; to get around the sign-in, the approval of computers or any other protection of the service; to overload or attack our services; or to resell access to LoudFlow. The voice rule above applies on top.",
+      ],
+    },
+    {
+      h: "Your responsibility",
+      p: [
+        "You may use the texts, recordings and files you put into LoudFlow. If you culpably break these Terms or somebody else's rights and somebody therefore makes a claim against us, you compensate us for the damage, including reasonable lawyers' fees.",
       ],
     },
     {
@@ -213,18 +286,29 @@ export const TERMS: Doc = {
       ],
     },
     {
-      h: "Your account",
+      h: "Your content",
       p: [
-        "One account per person, and it is yours to look after. Tell us at " +
-          CONTACT +
-          " if you think somebody else is using it.",
-        "Each account has its own voices, texts and settings; on a shared computer another account starts empty. Approve only computers that belong to you.",
+        "Texts, recordings and files you put in belong to you. We claim no rights in the audio LoudFlow produces; whether anybody holds a copyright in AI audio is often unclear.",
+        "You allow us only to store and transmit your content, encrypted, once you approve a second computer — and only to give it back to you there, until you delete it or your account. We do not use it to train models, our own or anybody else's.",
       ],
     },
     {
-      h: "Your content",
+      h: "Your data, and how we make LoudFlow better",
       p: [
-        "Texts you paste, recordings you make and audio LoudFlow produces belong to you. We store them only once you approve a second computer, only encrypted, and only to give them back to you there — and we do not use them to train models, our own or anybody else's.",
+        "What we always need: your email address, an account identifier, when you signed in, which version of these Terms you agreed to, and for each computer a short record (its name, operating system and app version). Without that there is no account.",
+        "What you can choose to share: right after you sign in, LoudFlow asks \"Help us improve?\" with Yes and No. If you say Yes, LoudFlow sends us your answers from the welcome tour (for example what you want read to you, why you listen, speed or best voice, your own voice or a ready one), which pages of the tour you saw and for how long, and — after your first day — how many texts were read and how fast your computer made speech. Never your texts, recordings, voices or name.",
+        "How reading feels to you is sent only with a second, separate Yes right at that question, because that answer can say something about your health.",
+        "What for: to see which version of the welcome tour works better, and to understand who LoudFlow helps, so that we build it for them. Never for advertising, never sold, never passed on.",
+        "Your choice: No has no disadvantage — LoudFlow does exactly the same. You can change your answer at any time in Settings › Data & privacy; switching it off deletes what was sent.",
+        "Numbers that no longer point to anybody: from many answers together we work out totals, such as how many people choose the fast voice. They say nothing about you and remain after you switch sharing off.",
+        "Error reports are sent only if you switch them on in Settings.",
+        "Who sees the data, where it is kept and for how long is on the Privacy page.",
+      ],
+    },
+    {
+      h: "Ideas you send us",
+      p: [
+        "If you send us feedback, ideas or bug reports, we may use them to improve LoudFlow without owing you anything for them. Your own texts and recordings are never feedback.",
       ],
     },
     {
@@ -236,7 +320,7 @@ export const TERMS: Doc = {
     {
       h: "Updates",
       p: [
-        "LoudFlow updates itself to fix bugs and security problems and to bring improvements. An update can change features; we tell you in the app about changes that matter, and you can uninstall LoudFlow at any time.",
+        "LoudFlow updates itself to fix bugs and security problems and to bring improvements. An update changes features only for a good reason: security, a change in the law, or to make LoudFlow better. It costs you nothing extra, and the reading aloud stays. If something gets noticeably worse for you, we tell you beforehand. You can uninstall LoudFlow at any time.",
       ],
     },
     {
@@ -248,13 +332,13 @@ export const TERMS: Doc = {
     {
       h: "Liability",
       p: [
-        "We are liable without limit for intent and gross negligence, for injury to life, body or health, and wherever the law does not allow a limit, including mandatory product liability. For slight negligence we are liable only for foreseeable direct damage, up to CHF 100 or what you paid us in the last twelve months, whichever is higher, and not for lost profit or indirect loss. Keep your own copies of anything that matters to you.",
+        "We are liable without limit for intent and gross negligence, for injury to life, body or health, and wherever the law does not allow a limit, including mandatory product liability. For slight negligence we are liable only if we breach a duty without which LoudFlow does not work for you and on which you may rely — and then only for the damage that is typical and foreseeable for a contract like this. Otherwise we are not liable for slight negligence. Keep your own copies of anything that matters to you.",
       ],
     },
     {
       h: "Ending it",
       p: [
-        "Delete your account in the app whenever you like; that is the whole termination process. We may suspend an account at once if it breaks the voice rule or the law, and we may stop offering the service with 30 days' notice in the app. Voices and texts on your computer stay there.",
+        "Delete your account in the app whenever you like; that is the whole termination process. We may suspend an account at once if it breaks the voice rule or the law. If we suspend yours, we tell you why by email; you can answer, and we look at it again. We may stop offering the service with 30 days' notice in the app. Voices and texts on your computer stay there.",
       ],
     },
     {
@@ -272,7 +356,13 @@ export const TERMS: Doc = {
     {
       h: "Changes",
       p: [
-        "We change these Terms only for a good reason — a change in the law, a new feature, or a sentence that was unclear. For changes that matter we tell you in the app at least 30 days ahead and ask you to agree again; until then the old Terms apply, and you may delete your account before the change starts.",
+        "We change these Terms only for a good reason — a change in the law, a new feature, or a sentence that was unclear. A change applies to you only once you agree to it in the app; until then the old Terms apply to you, and you may delete your account instead. Only small corrections that change nothing about your rights — a typo or a new address, say — we make without asking.",
+      ],
+    },
+    {
+      h: "Languages",
+      p: [
+        "These Terms exist in English and in German (loudflow.xyz/agb). Both say the same; if they ever disagree, the version more favourable to you applies.",
       ],
     },
     {
@@ -286,6 +376,182 @@ export const TERMS: Doc = {
   ],
 };
 
+// DIE AGB AUF DEUTSCH — 2026-09-30. Dieselben Regeln wie TERMS oben, Satz für
+// Satz, mit derselben Version: die App zeichnet EINE Version auf, und beide
+// Sprachen sind diese Version. Schweizer Schreibweise (ss statt ß), Du-Form wie
+// in der App. Kurze Sätze, weil LoudFlows Nutzer oft ungern lesen.
+export const TERMS_DE: Doc = {
+  slug: "agb",
+  lang: "de",
+  title: "AGB",
+  version: TERMS.version,
+  updated: "30. September 2026",
+  lead:
+    "Die Regeln für LoudFlow, in kurzen Sätzen. Oben das Wichtigste, " +
+    "darunter die Einzelheiten. In English: loudflow.xyz/terms.",
+  sections: [
+    {
+      h: "Das Wichtigste in Kürze",
+      p: [
+        "LoudFlow liest dir Texte vor, auf deinem eigenen Computer.",
+        "Du musst mindestens 16 Jahre alt sein.",
+        "Mach eine Stimme nur aus deiner eigenen Aufnahme – oder von jemandem, der klar zugestimmt hat.",
+        "Deine Texte und Stimmen gehören dir. Keine Werbung, und wir verkaufen nichts über dich.",
+        "Direkt nach der Anmeldung fragen wir dich einmal, ob du uns deine Antworten aus der Einführung schickst. Ja hilft uns, LoudFlow besser zu machen. Nein ist genauso okay – die App funktioniert gleich.",
+        "Du bist verantwortlich für die Stimmen, die du machst, und für das, was du damit teilst.",
+        "LoudFlow ist gratis und nicht fehlerfrei. Für leichte Fehler haften wir nur begrenzt (siehe „Haftung“).",
+        "Du kannst dein Konto jederzeit in der App löschen.",
+      ],
+    },
+    {
+      h: "Zustimmen",
+      p: [
+        "Wenn du dich zum ersten Mal anmeldest, zeigt dir LoudFlow, was in diesen AGB steht, mit Links zu ihnen und zur Datenschutzerklärung. Dort hakst du einzeln ab, dass du nur deine eigene Stimme klonst oder eine, für die du die Erlaubnis hast. Mit „Zustimmen und weiter“ nimmst du dann diese AGB an und bestätigst, dass du mindestens 16 bist. Die Datenschutzerklärung musst du nicht annehmen – sie erklärt dir, was mit deinen Daten passiert. LoudFlow speichert, welche Version du angenommen hast, dass du die Stimmen-Regel abgehakt hast, und wann.",
+        "Diese AGB kannst du jederzeit hier lesen, speichern (Strg+S) oder drucken (Strg+P) – auch bevor du zustimmst.",
+        "Stimmst du nicht zu, meldest du dich ab oder löschst dein Konto – sonst passiert nichts. Schweigen gilt nie als Zustimmung.",
+      ],
+    },
+    {
+      h: "Was LoudFlow macht",
+      p: [
+        "LoudFlow macht aus Text Sprache, mit KI-Stimmen, die auf deinem Computer laufen. Du kannst die mitgelieferten Stimmen nutzen oder aus einer kurzen Aufnahme oder einer Audiodatei eine eigene machen. Zum Anmelden brauchst du ein Konto und Internet; das Vorlesen selbst passiert offline.",
+      ],
+    },
+    {
+      h: "Dein Konto",
+      p: [
+        "Ein Konto pro Person, und du passt darauf auf. Schreib uns an " +
+          CONTACT +
+          ", wenn du glaubst, dass jemand anderes es benutzt.",
+        "Jedes Konto hat seine eigenen Stimmen, Texte und Einstellungen; auf einem geteilten Computer beginnt ein anderes Konto leer. Gib nur Computer frei, die dir gehören.",
+      ],
+    },
+    {
+      h: "Stimmen – die Regel, die zählt",
+      p: [
+        "Du darfst eine Stimme nur aus einer Aufnahme deiner eigenen Stimme machen – oder einer Person, die klar zugestimmt hat: zur künstlichen Kopie und dazu, wie du sie verwendest. Bei der Stimme eines Kindes müssen die Eltern zustimmen. Das gilt auch für Dateien, die du hochlädst. Du bestätigst es einmal mit einem eigenen Häkchen, wenn du diesen AGB zustimmst, und es gilt für alle deine Stimmen; jedes Mal, wenn du den Knopf drückst, der eine Stimme macht, erinnert dich eine Zeile darunter daran. Du bist verantwortlich für das, was du machst und teilst.",
+        "Benutze LoudFlow nicht, um eine echte Person nachzuahmen, damit du jemanden täuschst, betrügst, belästigst oder schlechtmachst; um eine Person etwas sagen zu lassen, das sie nie gesagt hat; um Beweise zu fälschen oder Stimm-Prüfungen zu umgehen; oder für sonst etwas Unerlaubtes. Ein Konto, das so benutzt wird, sperren wir, und wo das Gesetz es verlangt, arbeiten wir mit den Behörden zusammen.",
+        "Hat jemand deine Stimme ohne dein Ja kopiert? Schreib an " +
+          CONTACT +
+          ". Stimmt es, sperren wir das Konto und löschen, was davon bei uns gespeichert ist.",
+      ],
+    },
+    {
+      h: "Was nicht erlaubt ist",
+      p: [
+        "Benutze LoudFlow nicht, um Gesetze oder die Rechte anderer zu verletzen; um Audio von Texten zu veröffentlichen, die du nicht veröffentlichen darfst; um die Anmeldung, die Freigabe von Computern oder einen anderen Schutz des Dienstes zu umgehen; um unsere Dienste zu überlasten oder anzugreifen; oder um den Zugang zu LoudFlow weiterzuverkaufen. Die Stimmen-Regel oben gilt zusätzlich.",
+      ],
+    },
+    {
+      h: "Deine Verantwortung",
+      p: [
+        "Du darfst die Texte, Aufnahmen und Dateien verwenden, die du in LoudFlow gibst. Verletzt du schuldhaft diese AGB oder das Recht einer anderen Person und geht deshalb jemand gegen uns vor, ersetzt du uns den Schaden, auch angemessene Anwaltskosten.",
+      ],
+    },
+    {
+      h: "KI-Sprache",
+      p: [
+        "Alles, was LoudFlow spricht, erzeugt eine KI. Veröffentlichst du Audio aus LoudFlow – besonders solches, das wie eine echte Person klingt – oder nutzt du es bei der Arbeit, bist du dafür verantwortlich, es als KI-erzeugt zu kennzeichnen, wo das Gesetz es verlangt, in der Europäischen Union zum Beispiel nach dem AI Act.",
+        "Künstliche Sprache kann Wörter falsch aussprechen, auslassen oder erfinden und Zahlen und Namen verwechseln. Prüfe alles Wichtige, bevor du dich darauf verlässt.",
+      ],
+    },
+    {
+      h: "Was du bekommst",
+      p: [
+        "Das Recht, LoudFlow auf den Computern zu nutzen, über die du bestimmst, für deine eigenen Zwecke, privat oder beruflich, im Rahmen der Stimmen-Regel. Die Software bleibt unsere; was du damit machst, bleibt deins.",
+      ],
+    },
+    {
+      h: "Deine Inhalte",
+      p: [
+        "Texte, Aufnahmen und Dateien, die du einfügst, gehören dir. Am Audio, das LoudFlow erzeugt, beanspruchen wir keine Rechte; ob jemand ein Urheberrecht daran hat, ist bei KI-Audio oft unklar.",
+        "Du erlaubst uns nur, deine Inhalte verschlüsselt zu speichern und zu übertragen, wenn du einen zweiten Computer freigibst – und nur, um sie dir dort zurückzugeben, bis du sie oder dein Konto löschst. Wir trainieren damit keine Modelle, weder unsere noch die von anderen.",
+      ],
+    },
+    {
+      h: "Deine Daten und wie wir LoudFlow besser machen",
+      p: [
+        "Was wir immer brauchen: deine E-Mail-Adresse, eine Konto-Nummer, wann du dich angemeldet hast, welche Version dieser AGB du angenommen hast, und pro Computer einen kurzen Eintrag (Name, Betriebssystem, App-Version). Ohne das gibt es kein Konto.",
+        "Was du teilen kannst: Direkt nach der Anmeldung fragt LoudFlow „Hilfst du mit?“ – mit Ja und Nein. Sagst du Ja, schickt LoudFlow uns deine Antworten aus der Einführung (zum Beispiel was du dir vorlesen lässt, warum du zuhörst, schnell oder schön, eigene oder fertige Stimme), welche Seiten der Einführung du gesehen hast und wie lange, und nach deinem ersten Tag, wie viele Texte vorgelesen wurden und wie schnell dein Computer Sprache macht. Nie deine Texte, Aufnahmen, Stimmen oder deinen Namen.",
+        "Wie sich Lesen für dich anfühlt, schicken wir nur mit einem zweiten, eigenen Ja direkt bei dieser Frage – denn diese Antwort kann etwas über deine Gesundheit sagen.",
+        "Wofür: um zu sehen, welche Version der Einführung besser funktioniert, und um zu verstehen, wem LoudFlow hilft – damit wir die App für diese Menschen bauen. Nie für Werbung, nie verkauft, nie weitergegeben.",
+        "Deine Wahl: Nein hat keinen Nachteil – LoudFlow kann dann genau dasselbe. Du kannst deine Antwort jederzeit in den Einstellungen unter „Daten & Datenschutz“ ändern; Ausschalten löscht, was geschickt wurde.",
+        "Zahlen ohne Personenbezug: Aus vielen Antworten zusammen rechnen wir Summen aus, zum Beispiel wie viele die schnelle Stimme wählen. Sie sagen nichts über dich und bleiben, auch wenn du das Teilen später ausschaltest.",
+        "Fehlerberichte schicken wir nur, wenn du sie in den Einstellungen einschaltest.",
+        "Wer die Daten sieht, wo sie liegen und wie lange, steht in der Datenschutzerklärung.",
+      ],
+    },
+    {
+      h: "Ideen, die du uns schickst",
+      p: [
+        "Schickst du uns Feedback, Ideen oder Fehlermeldungen, dürfen wir sie nutzen, um LoudFlow besser zu machen, ohne dir dafür etwas zu schulden. Deine eigenen Texte und Aufnahmen sind nie Feedback.",
+      ],
+    },
+    {
+      h: "Was es kostet",
+      p: [
+        "Heute nichts. Kommt ein bezahltes Angebot, erfährst du es, bevor etwas verrechnet wird, und die Nutzung bis dahin wird nie nachträglich kostenpflichtig.",
+      ],
+    },
+    {
+      h: "Updates",
+      p: [
+        "LoudFlow aktualisiert sich selbst, um Fehler und Sicherheitslücken zu beheben und Verbesserungen zu bringen. Ein Update ändert Funktionen nur aus gutem Grund: für die Sicherheit, wegen neuem Recht oder um LoudFlow besser zu machen. Es kostet dich nichts extra, und das Vorlesen bleibt. Wird etwas für dich deutlich schlechter, sagen wir es dir vorher. Du kannst LoudFlow jederzeit deinstallieren.",
+      ],
+    },
+    {
+      h: "Keine Versprechen über das Gesetz hinaus",
+      p: [
+        "LoudFlow wird so bereitgestellt, wie es ist; wir versprechen nicht, dass es fehlerfrei oder immer verfügbar ist. Verlass dich für nichts Sicherheitskritisches, Medizinisches oder Rechtliches darauf. Rechte, die das Gesetz Konsumentinnen und Konsumenten bei fehlerhaften digitalen Produkten gibt, bleiben unberührt.",
+      ],
+    },
+    {
+      h: "Haftung",
+      p: [
+        "Wir haften unbeschränkt bei Absicht und grober Fahrlässigkeit, bei Verletzung von Leben, Körper oder Gesundheit und überall, wo das Gesetz keine Begrenzung erlaubt, auch nach zwingender Produkthaftung. Bei leichter Fahrlässigkeit haften wir nur, wenn wir eine Pflicht verletzen, ohne die LoudFlow für dich nicht funktioniert und auf die du dich verlassen darfst – und dann nur für den Schaden, der bei so einem Vertrag typisch und vorhersehbar ist. Sonst haften wir bei leichter Fahrlässigkeit nicht. Bewahre eigene Kopien von allem auf, was dir wichtig ist.",
+      ],
+    },
+    {
+      h: "Beenden",
+      p: [
+        "Lösch dein Konto in der App, wann du willst – das ist die ganze Kündigung. Wir dürfen ein Konto sofort sperren, wenn es gegen die Stimmen-Regel oder das Gesetz verstösst. Sperren wir dein Konto, sagen wir dir per E-Mail, warum; du kannst antworten, und wir schauen es noch einmal an. Den Dienst dürfen wir mit 30 Tagen Ankündigung in der App einstellen. Stimmen und Texte auf deinem Computer bleiben dort.",
+      ],
+    },
+    {
+      h: "Open-Source-Software",
+      p: [
+        "LoudFlow baut auf Open-Source-Software und -Modellen mit eigenen Lizenzen auf, darunter Qwen3-TTS (Apache 2.0, Alibaba Cloud), Pocket TTS (Kyutai; Code MIT, Modellgewichte CC BY 4.0, von uns für diese App umgewandelt), Electron und Chromium. Ihre Lizenzen und Hinweise liegen im Installationsordner der App. Wo eine Lizenz dir mehr Rechte gibt als diese AGB, gilt für diesen Teil die Lizenz.",
+      ],
+    },
+    {
+      h: "Recht und Gericht",
+      p: [
+        "Es gilt Schweizer Recht. Für Geschäftskunden sind ausschliesslich die Gerichte in St. Gallen, Schweiz, zuständig. Bist du Konsumentin oder Konsument, kannst du auch dort klagen, wo du wohnst, und die zwingenden Konsumentenschutz-Regeln deines Wohnlandes gelten weiter.",
+      ],
+    },
+    {
+      h: "Änderungen",
+      p: [
+        "Wir ändern diese AGB nur aus gutem Grund – eine neue Rechtslage, eine neue Funktion oder ein Satz, der unklar war. Eine Änderung gilt für dich erst, wenn du ihr in der App zustimmst; bis dahin gelten für dich die alten AGB, und du kannst dein Konto stattdessen löschen. Nur kleine Korrekturen, die an deinen Rechten nichts ändern – etwa ein Tippfehler oder eine neue Adresse –, machen wir ohne Frage.",
+      ],
+    },
+    {
+      h: "Sprachen",
+      p: [
+        "Diese AGB gibt es auf Deutsch und auf Englisch (loudflow.xyz/terms). Beide sagen dasselbe; sollten sie sich einmal widersprechen, gilt die Fassung, die für dich günstiger ist.",
+      ],
+    },
+    {
+      h: "Wer wir sind",
+      p: [
+        "LoudFlow wird von Lauro Maffei gemacht, Kanton St. Gallen, Schweiz, " +
+          CONTACT +
+          ". Eine Postadresse gibt es auf Anfrage.",
+      ],
+    },
+  ],
+};
+
 function esc(s: string): string {
   return s
     .replace(/&/g, "&amp;")
@@ -293,7 +559,13 @@ function esc(s: string): string {
     .replace(/>/g, "&gt;");
 }
 
+const LABELS = {
+  en: { version: "Version", updated: "last updated", privacy: "Privacy", terms: "Terms", termsHref: "/terms" },
+  de: { version: "Version", updated: "zuletzt geändert", privacy: "Datenschutz (Englisch)", terms: "AGB", termsHref: "/agb" },
+} as const;
+
 function render(doc: Doc): string {
+  const L = LABELS[doc.lang];
   const body = doc.sections
     .map(
       (s) =>
@@ -304,7 +576,7 @@ function render(doc: Doc): string {
     .join("");
 
   return `<!doctype html>
-<html lang="en">
+<html lang="${doc.lang}">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -355,10 +627,10 @@ function render(doc: Doc): string {
 <body>
 <main>
   <h1>${esc(doc.title)}</h1>
-  <p class="u">Version ${esc(doc.version)} · last updated ${esc(doc.updated)}</p>
+  <p class="u">${L.version} ${esc(doc.version)} · ${L.updated} ${esc(doc.updated)}</p>
   <p class="lead">${esc(doc.lead)}</p>
   ${body}
-  <footer>${esc(CONTACT)} · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></footer>
+  <footer>${esc(CONTACT)} · <a href="/privacy">${L.privacy}</a> · <a href="${L.termsHref}">${L.terms}</a></footer>
 </main>
 </body>
 </html>
