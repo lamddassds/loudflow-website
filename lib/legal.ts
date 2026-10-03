@@ -62,6 +62,24 @@
 // report a voice copied without consent, children's voices only with the
 // parents, no claim of copyright in AI audio, and "save or print" before
 // agreeing (§ 312i BGB). Still NOT reviewed by a lawyer.
+//
+// 2026-10-03 — LANGUAGE, REGION, AND WHAT IS TRUE SINCE 1 AND 2 OCTOBER. The
+// app speaks ten languages and picks one from what Windows says (LoudFlowBKE
+// app/src/main/firstrun.js), and orders voices by the Windows region
+// (app/src/shared/region-pref.js) — both read on the computer, never sent.
+// The Privacy page now says so ("Your language and region"), says we never
+// work out where somebody lives, and names the one place the app's language
+// does travel: the agreement record (app/src/main/legal.js `recordFor`, `lang`)
+// and, with a yes, the welcome-tour answers. PRIVACY_DE is the same page in
+// German at /datenschutz, so a German app links both documents in German.
+// Two corrections to match what runs today: the site moved to Cloudflare on
+// 2026-10-02 (Vercel named → Cloudflare named), and since onboarding v8
+// (2026-10-01) the Terms are accepted with the tick on the sign-in screen,
+// "Agree and continue" being only the fallback (legal.js NOTICE). The
+// versions stay 2026-09-30.1: that version had never been published (the
+// site still printed 2026-09-29.1), so this is its first public wording, and
+// raising it would sign every account out once more (index.js `agreeAtBoot`).
+// Still NOT reviewed by a lawyer.
 
 const INK = "#16150f";
 const MUTED = "#71716e";
@@ -112,9 +130,17 @@ export const PRIVACY: Doc = {
       ],
     },
     {
+      h: "Your language and region",
+      p: [
+        "LoudFlow speaks your language. To pick it, the app reads which language Windows is set to. To put voices with your accent at the top of the voice list, it also reads which region Windows is set to. Both are read on your computer and used there: they are not sent to us, not saved with your account and not used for statistics.",
+        "We do not try to find out where you live — not from your IP address, not from your email address, not in any other way.",
+        "You can change the app's language at any time in Settings › General. The language the app is showing is sent to us in two cases only: with your agreement to the Terms, so that we know which wording you saw, and with your welcome-tour answers if you said yes to sharing them.",
+      ],
+    },
+    {
       h: "What we hold when you sign in",
       p: [
-        "Your email address, an account identifier, the times you signed in, which version of the Terms you agreed to and which version of this Privacy page was shown to you, and when (you agree with \"Agree and continue\" on the screen that follows your first sign-in, after ticking the voice rule), and your answer to \"Help us improve?\" with its time. That is what an account is. We do not email you marketing.",
+        "Your email address, an account identifier, the times you signed in, which version of the Terms you agreed to and which version of this Privacy page was shown to you, in which language and when (you agree by ticking the box on the sign-in screen — see \"Agreeing\" in the Terms), and your answer to \"Help us improve?\" with its time. That is what an account is. We do not email you marketing.",
         "For each computer you use LoudFlow on, a short record: the computer's name as Windows reports it, its operating system and app version, a public key, and when it was last seen. It holds no content. We use it for one purpose — to know which computers are yours — and for nothing else.",
       ],
     },
@@ -149,7 +175,7 @@ export const PRIVACY: Doc = {
         "Supabase — our database and sign-in, servers in Zurich, Switzerland. It processes the data on our instructions. Row-level rules in the database mean an account can only ever read its own rows and its own files.",
         "Google — only if you choose to sign in with Google: they tell us your email address and name, and they know that you signed in to LoudFlow. Google handles that under its own privacy policy.",
         "Resend (United States) — only if you sign in with your email address: it delivers the email with your sign-in code, and for that it receives your email address and the code.",
-        "Vercel (United States) — hosts this website. Like every web host it logs your IP address and the page you asked for, to deliver the site and keep it secure, and deletes those logs after a short time.",
+        "Cloudflare (United States) — runs this website, including the page your browser comes back to after a Google sign-in. Like every web host it logs your IP address and the page you asked for, to deliver the site and keep it secure, and deletes those logs after a short time.",
         "GitHub (United States) — hosts the installer and the updates. Downloading LoudFlow or checking for an update shows GitHub your IP address.",
         "PostHog (Frankfurt) — only if you switch on error reports, as described above.",
         "Nobody else. We do not train anything on your voice or your texts, and neither does anybody we work with.",
@@ -158,13 +184,13 @@ export const PRIVACY: Doc = {
     {
       h: "Sending data abroad",
       p: [
-        "Resend, Google, Vercel and GitHub are in the United States. Those transfers rest on the safeguards in each provider's data processing terms — the EU standard contractual clauses, which Switzerland recognises, or the provider's certification under the Swiss-U.S. and EU-U.S. Data Privacy Framework.",
+        "Resend, Google, Cloudflare and GitHub are in the United States. Those transfers rest on the safeguards in each provider's data processing terms — the EU standard contractual clauses, which Switzerland recognises, or the provider's certification under the Swiss-U.S. and EU-U.S. Data Privacy Framework.",
       ],
     },
     {
       h: "Why the law lets us",
       p: [
-        "Your account, your computer records and the sign-in emails: to give you the service you signed up for. Website logs: our interest in a secure website. The encrypted copy for a second computer, your welcome-tour answers and error reports: your consent, which you can withdraw at any time with the same switch or by removing the computer. Your answer on how reading feels: your explicit consent to that one answer (Art. 9(2)(a) GDPR, Art. 6(7) Swiss FADP), withdrawn with its own switch. Nothing about you is decided by a computer alone.",
+        "Your account, your computer records, the record of what you agreed to and the sign-in emails: to give you the service you signed up for and to be able to show what was agreed. Website logs: our interest in a secure website. The encrypted copy for a second computer, your welcome-tour answers and error reports: your consent, which you can withdraw at any time with the same switch or by removing the computer. Your answer on how reading feels: your explicit consent to that one answer (Art. 9(2)(a) GDPR, Art. 6(7) Swiss FADP), withdrawn with its own switch. Nothing about you is decided by a computer alone.",
       ],
     },
     {
@@ -201,6 +227,154 @@ export const PRIVACY: Doc = {
         "If this page changes, its version and date at the top change with it. If the change matters, the app shows it to you again before it applies to you. You do not have to accept this page; it informs you.",
       ],
     },
+    {
+      h: "Languages",
+      p: [
+        "This page exists in English and in German (loudflow.xyz/datenschutz). Both say the same; if they ever disagree, the version more favourable to you applies.",
+      ],
+    },
+  ],
+};
+
+// DIE DATENSCHUTZERKLÄRUNG AUF DEUTSCH — 2026-10-03. Dieselbe Seite wie PRIVACY
+// oben, Satz für Satz, mit derselben Version, so wie TERMS_DE neben TERMS. Bis
+// heute gab es sie nur auf Englisch, und der deutsche Fuss der AGB verlinkte
+// „Datenschutz (Englisch)“ — für eine App, die in zehn Sprachen spricht und sich
+// an Menschen richtet, die ungern lesen, ist eine Datenschutzerklärung in einer
+// fremden Sprache keine „klare und einfache Sprache“ (DSGVO Art. 12 Abs. 1).
+// Schweizer Schreibweise (ss statt ß), Du-Form wie in der App.
+export const PRIVACY_DE: Doc = {
+  slug: "datenschutz",
+  lang: "de",
+  title: "Datenschutz",
+  version: PRIVACY.version,
+  updated: "30. September 2026",
+  lead:
+    "LoudFlow liest dir Texte vor, auf deinem eigenen Computer. Du meldest dich mit einem Konto an, " +
+    "und wir behalten nur so viel, wie ein funktionierendes Konto braucht. Diese Seite sagt genau, was das ist.",
+  sections: [
+    {
+      h: "Das Wichtigste in Kürze",
+      p: [
+        "Die Texte, die du dir vorlesen lässt, das Audio, das LoudFlow daraus macht, und die Stimmen-Modelle, die es dafür nutzt, bleiben auf deinem Computer. Es gibt keine Werbung, kein Tracking über Apps oder Websites hinweg, und wir verkaufen, vermieten oder teilen deine Daten nicht.",
+        "Wir kennen deine E-Mail-Adresse und führen einen kurzen Eintrag zu jedem Computer, den du nutzt. Solange du LoudFlow auf einem Computer nutzt, verlassen deine Stimmen und Texte ihn nie.",
+        "Zwei Dinge werden nur gesendet, wenn du Ja sagst: deine Antworten aus der Einführung – wir fragen dich einmal, direkt nach der Anmeldung, und Ja und Nein sind gleich einfach – und Fehlerberichte, ein Schalter in den Einstellungen. Nein zu sagen ändert nichts daran, was die App kann.",
+        "Nur wenn du einen zweiten eigenen Computer freigibst – und LoudFlow fragt dich, bevor irgendetwas hochgeladen wird –, reisen deine gespeicherten Stimmen und Texte zwischen deinen Computern, Ende-zu-Ende-verschlüsselt. Den Schlüssel gibt es nur auf deinen Computern; wir können nicht lesen, was wir speichern.",
+        "Löschst du dein Konto, ist alles weg – auf einmal und für immer.",
+      ],
+    },
+    {
+      h: "Was auf deinem Computer bleibt",
+      p: [
+        "Alles, was die App tut, um Sprache zu machen: der Text, den du einfügst oder markierst, das Audio, das sie erzeugt, die mitgelieferten Stimmen, die Aufnahmen, die du als Vorlage machst, deine Einstellungen und das Diagnose-Protokoll, das sie für sich selbst führt. LoudFlow spricht ohne Internet; das ist das Produkt, keine Einstellung.",
+        "Deine Antworten in der Einführung werden immer auf deinem Computer genutzt, um LoudFlow für dich einzurichten – zum Beispiel, um im schnellen Modus zu starten, wenn dein Computer langsam ist. Diese Nutzung verlässt deinen Computer nie.",
+        "Jedes Konto hat seine eigenen Stimmen, Texte und Einstellungen. Zwei Konten auf einem Computer sehen die Sachen des anderen nicht, und ein neues Konto beginnt leer.",
+      ],
+    },
+    {
+      h: "Deine Sprache und Region",
+      p: [
+        "LoudFlow spricht deine Sprache. Um sie zu wählen, liest die App, auf welche Sprache Windows eingestellt ist. Damit Stimmen mit deinem Akzent oben in der Stimmenliste stehen, liest sie auch, auf welche Region Windows eingestellt ist. Beides wird auf deinem Computer gelesen und dort genutzt: Es wird nicht an uns gesendet, nicht mit deinem Konto gespeichert und nicht für Statistiken genutzt.",
+        "Wir versuchen nicht herauszufinden, wo du wohnst – nicht über deine IP-Adresse, nicht über deine E-Mail-Adresse, auf keinem anderen Weg.",
+        "Die Sprache der App kannst du jederzeit in Einstellungen › Allgemein ändern. Die Sprache, in der die App gerade angezeigt wird, wird nur in zwei Fällen an uns gesendet: mit deiner Zustimmung zu den AGB, damit wir wissen, welchen Wortlaut du gesehen hast, und mit deinen Antworten aus der Einführung, wenn du Ja zum Teilen gesagt hast.",
+      ],
+    },
+    {
+      h: "Was wir speichern, wenn du dich anmeldest",
+      p: [
+        "Deine E-Mail-Adresse, eine Konto-Kennung, die Zeiten deiner Anmeldungen, welche Version der AGB du angenommen hast und welche Version dieser Datenschutzerklärung dir gezeigt wurde, in welcher Sprache und wann (du stimmst zu, indem du das Kästchen auf dem Anmelde-Bildschirm anhakst – siehe „Zustimmen“ in den AGB), und deine Antwort auf „Hilfst du mit?“ mit ihrer Zeit. Das ist ein Konto. Wir schicken dir keine Werbe-E-Mails.",
+        "Für jeden Computer, auf dem du LoudFlow nutzt, einen kurzen Eintrag: den Namen des Computers, wie Windows ihn meldet, sein Betriebssystem und die App-Version, einen öffentlichen Schlüssel und wann er zuletzt gesehen wurde. Er enthält keine Inhalte. Wir nutzen ihn für einen einzigen Zweck – zu wissen, welche Computer deine sind – und für nichts anderes.",
+      ],
+    },
+    {
+      h: "Deine Antworten aus der Einführung – nur, wenn du Ja sagst",
+      p: [
+        "Direkt nach deiner ersten Anmeldung fragt LoudFlow „Hilfst du mit?“ und zeigt, was gesendet würde. Ja und Nein sind zwei gleich grosse Knöpfe, und nichts wird gesendet, bevor du Ja wählst. Du kannst deine Antwort jederzeit auf der ersten Seite der Einführung oder in Einstellungen › Daten & Datenschutz ändern.",
+        "Sagst du Ja, speichern wir mit deinem Konto: deine Wahl in der Einführung (was du dir vorlesen lassen willst, warum du zuhörst, Tempo oder beste Stimme, ob du deine eigene Stimme gemacht oder eine ausgewählt hast), welche Seiten der Einführung du gesehen hast und wie lange, welche Version der Einführung dir gezeigt wurde, die App-Version und die Sprache der App und – nach deinem ersten Tag – wie viele Texte vorgelesen wurden und wie schnell auf deinem Computer Sprache entstand. Nie deine Texte, Aufnahmen, Stimmen oder deinen Namen.",
+        "Wie sich Lesen für dich anfühlt (leicht, geht so, anstrengend oder sehr schwer), wird nur gesendet, wenn du zusätzlich einen zweiten Schalter einschaltest, direkt unter dieser Frage. Er ist aus, bis du ihn einschaltest – ein Ja zur ersten Frage schliesst ihn nicht ein. Diese Antwort kann etwas über deine Gesundheit sagen, darum nehmen wir sie nur mit diesem eigenen, ausdrücklichen Ja, und ohne es bleibt die Antwort auf deinem Computer.",
+        "Diese Daten sind mit deinem Konto verknüpft, also nicht anonym. Dein Konto kann nur seine eigene Zeile lesen; wir, die Macher, können alle Zeilen in der Admin-Ansicht unserer Datenbank lesen. Wir nutzen sie nur für zwei Dinge: um zu sehen, welche Version der Einführung besser funktioniert, und um zu verstehen, wem LoudFlow hilft – zum Beispiel, wie viele Menschen Lesen schwer finden –, damit wir es für sie bauen. Nie für Werbung, nie verkauft, nie weitergegeben. Schaltest du den ersten Schalter aus (in der Einführung oder in den Einstellungen), wird gelöscht, was gesendet wurde; schaltest du nur den zweiten aus, wird deine Antwort zum Lesen entfernt. Sonst bleiben die Daten, bis du dein Konto löschst. Summen aus den Antworten vieler Menschen zusammen – zum Beispiel, wie viele die schnelle Stimme gewählt haben – zeigen auf niemanden mehr und bleiben, auch nachdem du das Teilen ausgeschaltet hast.",
+      ],
+    },
+    {
+      h: "Fehlerberichte – nur, wenn du sie einschaltest",
+      p: [
+        "Schaltest du in den Einstellungen Fehlerberichte ein, sendet die App an PostHog (Server in Frankfurt, Deutschland) die App-Version, deine Windows-Version und was schiefgegangen ist – nie deine Texte, deinen Namen oder deine Stimmen. Der Bericht selbst enthält keine IP-Adresse; die Server von PostHog sehen die Adresse der Verbindung, wie jeder Server. Schaltest du sie aus, wird die zufällige Kennung gelöscht, die die Berichte genutzt haben.",
+      ],
+    },
+    {
+      h: "Was wir speichern, wenn du einen zweiten Computer nutzt",
+      p: [
+        "Nichts, bis du es sagst. Meldest du dich auf einem anderen Computer an, bittet dich der erste, ihn freizugeben, und diese Frage sagt – bevor irgendetwas hochgeladen wird –, dass deine gespeicherten Stimmen und Texte von da an in der Cloud gespeichert werden, Ende-zu-Ende-verschlüsselt. Die Freigabe ist deine Einwilligung. Wir speichern, welchem Wortlaut du zugestimmt hast und wann.",
+        "Was reist: die Stimmen, die du gespeichert hast – die kurze Vorlage-Aufnahme, ihr Name, ihre Sprache und ihr Transkript sowie die daraus gemessenen Einstellungen – und die Texte, die du dir hast vorlesen lassen, mit ihrem Datum. Nicht das erzeugte Audio.",
+        "Wie: Alles wird auf deinem Computer verschlüsselt, bevor es hochgeladen wird (AES-256-GCM), mit einem Schlüssel, den nur deine freigegebenen Computer haben; der Schlüssel geht von einem deiner Computer zum nächsten, versiegelt mit dem eigenen Schlüssel dieses Computers. Wir speichern nur die verschlüsselten Dateien und können sie nicht öffnen.",
+        "Wann es wieder geht: Bist du wieder bei einem Computer – weil du den anderen in der App entfernt hast oder er 60 Tage nicht genutzt wurde –, wird die verschlüsselte Kopie bei der nächsten Prüfung gelöscht. Einen Computer zu entfernen, zieht auch seine Freigabe zurück: Um zurückzukommen, muss er wieder freigegeben werden.",
+        "Eine Stimme kann eine Person erkennbar machen, darum behandeln wir gespeicherte Stimmen als sensible Daten: Sie reisen nur mit deiner ausdrücklichen Einwilligung, nur verschlüsselt, und wir können sie nicht öffnen. Eine Aufnahme der Stimme eines anderen Menschen sind seine Personendaten – speichere nur eine Aufnahme, die du selbst gemacht hast oder für die du seine Erlaubnis hast.",
+      ],
+    },
+    {
+      h: "Wer sonst beteiligt ist",
+      p: [
+        "Supabase – unsere Datenbank und Anmeldung, Server in Zürich, Schweiz. Supabase verarbeitet die Daten in unserem Auftrag. Regeln in der Datenbank sorgen dafür, dass ein Konto immer nur seine eigenen Zeilen und seine eigenen Dateien lesen kann.",
+        "Google – nur, wenn du dich mit Google anmeldest: Google teilt uns deine E-Mail-Adresse und deinen Namen mit und weiss, dass du dich bei LoudFlow angemeldet hast. Google behandelt das nach seiner eigenen Datenschutzerklärung.",
+        "Resend (USA) – nur, wenn du dich mit deiner E-Mail-Adresse anmeldest: Resend stellt die E-Mail mit deinem Anmelde-Code zu und erhält dafür deine E-Mail-Adresse und den Code.",
+        "Cloudflare (USA) – betreibt diese Website, auch die Seite, auf die dein Browser nach einer Anmeldung mit Google zurückkommt. Wie jeder Web-Host protokolliert Cloudflare deine IP-Adresse und die Seite, die du aufgerufen hast, um die Website auszuliefern und sicher zu halten, und löscht diese Protokolle nach kurzer Zeit.",
+        "GitHub (USA) – hostet den Installer und die Updates. Lädst du LoudFlow herunter oder sucht die App nach einem Update, sieht GitHub deine IP-Adresse.",
+        "PostHog (Frankfurt) – nur, wenn du Fehlerberichte einschaltest, wie oben beschrieben.",
+        "Sonst niemand. Wir trainieren nichts mit deiner Stimme oder deinen Texten, und auch niemand, mit dem wir zusammenarbeiten.",
+      ],
+    },
+    {
+      h: "Daten ins Ausland",
+      p: [
+        "Resend, Google, Cloudflare und GitHub sind in den USA. Diese Übermittlungen stützen sich auf die Garantien in den Datenverarbeitungs-Bedingungen des jeweiligen Anbieters – die Standardvertragsklauseln der EU, die die Schweiz anerkennt, oder die Zertifizierung des Anbieters nach dem Swiss-U.S. und dem EU-U.S. Data Privacy Framework.",
+      ],
+    },
+    {
+      h: "Warum das Gesetz es erlaubt",
+      p: [
+        "Dein Konto, die Einträge zu deinen Computern, der Eintrag deiner Zustimmung und die Anmelde-E-Mails: um dir den Dienst zu geben, für den du dich angemeldet hast, und um zeigen zu können, was vereinbart wurde. Website-Protokolle: unser Interesse an einer sicheren Website. Die verschlüsselte Kopie für einen zweiten Computer, deine Antworten aus der Einführung und Fehlerberichte: deine Einwilligung, die du jederzeit mit demselben Schalter oder durch Entfernen des Computers zurückziehen kannst. Deine Antwort, wie sich Lesen für dich anfühlt: deine ausdrückliche Einwilligung zu genau dieser Antwort (Art. 9 Abs. 2 lit. a DSGVO, Art. 6 Abs. 7 DSG), zurückziehbar mit ihrem eigenen Schalter. Nichts über dich wird allein von einem Computer entschieden.",
+      ],
+    },
+    {
+      h: "Cookies",
+      p: [
+        "Diese Website setzt keine Cookies, nutzt keine Analyse-Werkzeuge und lädt ihre Schriften von ihrem eigenen Server. Die App setzt keine Cookies und behält deine Einstellungen auf deinem Computer. Es gibt nichts, dem du zustimmen müsstest – darum wirst du nicht gefragt.",
+      ],
+    },
+    {
+      h: "Wie lange wir es behalten",
+      p: [
+        "Bis du es löschst. Löschst du dein Konto in LoudFlow, werden deine Zeilen, die Einträge zu deinen Computern, deine Antworten aus der Einführung, deine verschlüsselten Kopien und das Konto selbst in einem Schritt entfernt – wir haben keine eigene Kopie und kein Archiv. Sicherungen der Datenbank behält unser Anbieter für kurze Zeit; sie laufen von selbst ab.",
+        "Bringt eine Verletzung der Sicherheit unserer Daten wahrscheinlich ein hohes Risiko für dich mit sich, informieren wir dich und die Behörde so schnell wie möglich.",
+      ],
+    },
+    {
+      h: "Deine Rechte",
+      p: [
+        "Nach dem Schweizer Datenschutzgesetz und, wo sie gilt, der DSGVO kannst du fragen, was wir über dich gespeichert haben, es berichtigen lassen, es löschen lassen, eine Kopie davon bekommen oder der Nutzung widersprechen. Schreib an " +
+          CONTACT +
+          " – wir antworten innert dreissig Tagen. Du kannst dich auch beim Eidgenössischen Datenschutz- und Öffentlichkeitsbeauftragten (edoeb.admin.ch) oder bei der Datenschutzbehörde an deinem Wohnort beschweren.",
+        "Verantwortlich ist Lauro Maffei, der Macher von LoudFlow, Kanton St. Gallen, Schweiz, erreichbar unter " +
+          CONTACT +
+          ". Eine Postadresse gibt es auf Anfrage.",
+      ],
+    },
+    {
+      h: "Kinder",
+      p: ["LoudFlow ist nicht für Menschen unter 16 gedacht."],
+    },
+    {
+      h: "Änderungen",
+      p: [
+        "Ändert sich diese Seite, ändern sich auch ihre Version und ihr Datum oben. Ist die Änderung wichtig, zeigt dir die App sie noch einmal, bevor sie für dich gilt. Du musst diese Seite nicht annehmen; sie informiert dich.",
+      ],
+    },
+    {
+      h: "Sprachen",
+      p: [
+        "Diese Seite gibt es auf Deutsch und auf Englisch (loudflow.xyz/privacy). Beide sagen dasselbe; sollten sie sich einmal widersprechen, gilt die Fassung, die für dich günstiger ist.",
+      ],
+    },
   ],
 };
 
@@ -230,7 +404,7 @@ export const TERMS: Doc = {
     {
       h: "Agreeing",
       p: [
-        "The first time you sign in, LoudFlow shows you what these Terms say, with links to them and to the Privacy page. There you tick, on its own, that you only clone your own voice or one you have permission for. By then choosing \"Agree and continue\" you accept these Terms and confirm that you are at least 16. You do not have to accept the Privacy page — it tells you what happens to your data. LoudFlow records which version you agreed to, that you ticked the voice rule, and when.",
+        "Before you sign in for the first time, the sign-in screen shows one box — \"I accept the Terms.\", and under it \"16+ · I only clone with permission\" — with links to these Terms and to the Privacy page. By ticking it and signing in, you accept these Terms, confirm that you are at least 16, and confirm that you only clone your own voice or one you have permission for. If you sign in without that tick, the screen after the sign-in shows the same box with \"Agree and continue\". You do not have to accept the Privacy page — it tells you what happens to your data. LoudFlow records which version you agreed to, in which language, that you confirmed the voice rule, and when.",
         "You can read, save (Ctrl+S) or print (Ctrl+P) these Terms here at any time — also before you agree.",
         "If you do not agree, sign out or delete your account, and nothing else happens. We never treat silence as agreement.",
       ],
@@ -363,6 +537,7 @@ export const TERMS: Doc = {
       h: "Languages",
       p: [
         "These Terms exist in English and in German (loudflow.xyz/agb). Both say the same; if they ever disagree, the version more favourable to you applies.",
+        "The Privacy page exists in English (loudflow.xyz/privacy) and in German (loudflow.xyz/datenschutz) too. The app itself speaks ten languages; you choose which in Settings › General.",
       ],
     },
     {
@@ -406,7 +581,7 @@ export const TERMS_DE: Doc = {
     {
       h: "Zustimmen",
       p: [
-        "Wenn du dich zum ersten Mal anmeldest, zeigt dir LoudFlow, was in diesen AGB steht, mit Links zu ihnen und zur Datenschutzerklärung. Dort hakst du einzeln ab, dass du nur deine eigene Stimme klonst oder eine, für die du die Erlaubnis hast. Mit „Zustimmen und weiter“ nimmst du dann diese AGB an und bestätigst, dass du mindestens 16 bist. Die Datenschutzerklärung musst du nicht annehmen – sie erklärt dir, was mit deinen Daten passiert. LoudFlow speichert, welche Version du angenommen hast, dass du die Stimmen-Regel abgehakt hast, und wann.",
+        "Bevor du dich zum ersten Mal anmeldest, zeigt der Anmelde-Bildschirm ein Kästchen – „Ich akzeptiere die AGB.“, darunter „16+ · Ich klone nur mit Erlaubnis“ – mit Links zu diesen AGB und zur Datenschutzerklärung. Hakst du es an und meldest dich an, nimmst du diese AGB an und bestätigst, dass du mindestens 16 bist und nur deine eigene Stimme klonst oder eine, für die du die Erlaubnis hast. Meldest du dich ohne dieses Häkchen an, zeigt der Bildschirm nach der Anmeldung dasselbe Kästchen mit „Zustimmen und weiter“. Die Datenschutzerklärung musst du nicht annehmen – sie erklärt dir, was mit deinen Daten passiert. LoudFlow speichert, welche Version du angenommen hast, in welcher Sprache, dass du die Stimmen-Regel bestätigt hast, und wann.",
         "Diese AGB kannst du jederzeit hier lesen, speichern (Strg+S) oder drucken (Strg+P) – auch bevor du zustimmst.",
         "Stimmst du nicht zu, meldest du dich ab oder löschst dein Konto – sonst passiert nichts. Schweigen gilt nie als Zustimmung.",
       ],
@@ -539,6 +714,7 @@ export const TERMS_DE: Doc = {
       h: "Sprachen",
       p: [
         "Diese AGB gibt es auf Deutsch und auf Englisch (loudflow.xyz/terms). Beide sagen dasselbe; sollten sie sich einmal widersprechen, gilt die Fassung, die für dich günstiger ist.",
+        "Die Datenschutzerklärung gibt es ebenso auf Deutsch (loudflow.xyz/datenschutz) und auf Englisch (loudflow.xyz/privacy). Die App selbst spricht zehn Sprachen; welche, wählst du in Einstellungen › Allgemein.",
       ],
     },
     {
@@ -560,8 +736,8 @@ function esc(s: string): string {
 }
 
 const LABELS = {
-  en: { version: "Version", updated: "last updated", privacy: "Privacy", terms: "Terms", termsHref: "/terms" },
-  de: { version: "Version", updated: "zuletzt geändert", privacy: "Datenschutz (Englisch)", terms: "AGB", termsHref: "/agb" },
+  en: { version: "Version", updated: "last updated", privacy: "Privacy", privacyHref: "/privacy", terms: "Terms", termsHref: "/terms" },
+  de: { version: "Version", updated: "zuletzt geändert", privacy: "Datenschutz", privacyHref: "/datenschutz", terms: "AGB", termsHref: "/agb" },
 } as const;
 
 function render(doc: Doc): string {
@@ -630,7 +806,7 @@ function render(doc: Doc): string {
   <p class="u">${L.version} ${esc(doc.version)} · ${L.updated} ${esc(doc.updated)}</p>
   <p class="lead">${esc(doc.lead)}</p>
   ${body}
-  <footer>${esc(CONTACT)} · <a href="/privacy">${L.privacy}</a> · <a href="${L.termsHref}">${L.terms}</a></footer>
+  <footer>${esc(CONTACT)} · <a href="${L.privacyHref}">${L.privacy}</a> · <a href="${L.termsHref}">${L.terms}</a></footer>
 </main>
 </body>
 </html>

@@ -16,7 +16,7 @@
 
 import { maintenanceResponse } from "../lib/maintenance";
 import { authDoneResponse } from "../lib/authdone";
-import { legalResponse, PRIVACY, TERMS } from "../lib/legal";
+import { legalResponse, PRIVACY, PRIVACY_DE, TERMS, TERMS_DE } from "../lib/legal";
 import { POST as googleTokenPost, GET as googleTokenGet } from "../app/api/google-token/route";
 
 export const CANONICAL = "loudflow.ai";
@@ -55,6 +55,13 @@ export function route(req: Request): Response | Promise<Response> {
       return legalResponse(PRIVACY);
     case "/terms":
       return legalResponse(TERMS);
+    // The German pair (2026-10-03). The app opens /agb for a German interface
+    // since 2026-09-30 (LoudFlowBKE main/index.js TERMS_URL_DE), and until this
+    // case existed that link landed on the maintenance notice.
+    case "/agb":
+      return legalResponse(TERMS_DE);
+    case "/datenschutz":
+      return legalResponse(PRIVACY_DE);
     case "/api/google-token":
       return req.method === "POST" ? googleTokenPost(req) : googleTokenGet();
     default:
